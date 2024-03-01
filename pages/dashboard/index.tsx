@@ -180,7 +180,7 @@ function Index() {
 
       {/* Main Content */}
       <div
-        className={`transition-all duration-300 ease-in-out h-screen flex-1 ${
+        className={`transition-all duration-300 ease-in-out h-screen overflow-hidden flex-1 ${
           isSidebarOpen ? "ml-96 opacity-80" : ""
         } bg-[#808080]`}
       >
@@ -238,7 +238,10 @@ function Index() {
                     </div>
                     <Dropdown>
                       <DropdownTrigger className="rounded-full">
-                        <Button variant="bordered" className="capitalize font-medium">
+                        <Button
+                          variant="bordered"
+                          className="capitalize font-medium"
+                        >
                           {selectedLanguage}
                           <Image src={arrowdown} alt="arrowdown" />
                         </Button>
