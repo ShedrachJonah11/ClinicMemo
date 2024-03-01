@@ -42,11 +42,11 @@ export default function Nav() {
   return (
     <Navbar maxWidth="xl" className="shadow p-0 md:px-6 top-[0] bg-white ">
       <NavbarBrand
-        className="w-fit flex-grow-[0.2] md:flex-grow-[0.6] mr-4"
+        className="w-fit flex-grow-[0.2] md:flex-grow-[0.6] "
         as={Link}
         href="/"
       >
-        <Image src={logo} alt="logo" width={200} height={50} className="mr-6" />
+        <Image src={logo} alt="logo" width={200} height={50} className="" />
       </NavbarBrand>
 
       {/* Conditional rendering based on screen size */}
@@ -64,10 +64,13 @@ export default function Nav() {
             <h1 className="text-black">Pricing</h1>
           </NavbarItem>
 
-          <NavbarItem as={Link}>
-            <h1 className="text-black">Login</h1>
-          </NavbarItem>
-          <Button>Get Started</Button>
+          {/* Right  */}
+          <div className="ml-auto flex items-center">
+            <NavbarItem as={Link} className="mr-4">
+              <h1 className="text-black">Login</h1>
+            </NavbarItem>
+            <Button>Get Started</Button>
+          </div>
         </NavbarContent>
       )}
 
