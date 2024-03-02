@@ -16,7 +16,7 @@ function Index() {
       <div className="flex flex-col lg:flex-row h-screen bg-[#FAF9F6] overflow-x-hidden">
         {/* Content */}
         <div className="flex-1 flex flex-col px-6 py-28 md:py-32 md:px-24 lg:px-32">
-          <Button className="flex items-start gap-4 py-2 px-4 bg-[#FAE5D3] w-4/6 rounded-full mb-8 lg:mb-0">
+          <Button className="flex items-start gap-4 py-2 px-4 bg-[#FAE5D3] rounded-full mb-8 lg:mb-0">
             <p className="text-[#808080] text-sm">
               Learn how AI can help you with documentation.
             </p>
