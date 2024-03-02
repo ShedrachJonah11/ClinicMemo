@@ -1,0 +1,13 @@
+.avatar-group-custom .avatar {
+  width: 25px; /* Set the width of the avatars */
+  height: 25px; /* Set the height of the avatars */
+  margin-right: -8px; /* Adjust the spacing between avatars */
+}
+
+.delete-button {
+  visibility: hidden;
+}
+
+.card:hover .delete-button {
+  visibility: visible;
+}

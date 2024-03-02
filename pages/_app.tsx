@@ -19,7 +19,7 @@ function App({ Component, pageProps }: AppProps) {
               name="viewport"
               content="width=device-width, initial-scale=1"
             />
-            <title>ClinicMemo</title>
+            <title>VetMemos</title>
           </Head>
           <Component {...pageProps} />
         </AppContext.Provider>

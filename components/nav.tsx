@@ -11,7 +11,7 @@ import {
   Button,
 } from "@nextui-org/react";
 import Image from "next/image";
-import logo from "../public/clinic.svg";
+import logo from "../public/vetmemo.svg";
 
 export default function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -67,9 +67,11 @@ export default function Nav() {
           {/* Right  */}
           <div className="ml-auto flex items-center">
             <NavbarItem as={Link} className="mr-4">
-              <h1 className="text-black">Login</h1>
+              <h1 className="text-black font-semibold">Login</h1>
             </NavbarItem>
-            <Button>Get Started</Button>
+            <Button size="md" className="bg-[#008080] px-6">
+              <h1 className="text-white font-semibold">Get Started</h1>
+            </Button>
           </div>
         </NavbarContent>
       )}
