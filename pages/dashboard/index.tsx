@@ -1,5 +1,4 @@
-"use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Avatar,
   Button,
@@ -53,6 +52,7 @@ declare global {
     SpeechRecognition: new () => SpeechRecognition;
   }
 }
+
 function Index() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
@@ -104,6 +104,26 @@ function Index() {
 
   // Function to resume recording
   const resumeRecording = () => {};
+
+  useEffect(() => {
+    const handleResize = () => {
+      // Check screen width
+      if (window.innerWidth <= 768) {
+        setIsSidebarOpen(false); // Close sidebar for small screens
+      } else {
+        setIsSidebarOpen(true); // Open sidebar for larger screens
+      }
+    };
+
+    // Call handleResize when the window is resized
+    window.addEventListener("resize", handleResize);
+
+    // Call handleResize when the component mounts
+    handleResize();
+
+    // Remove event listener when component unmounts
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   return (
     <div className="relative flex">
@@ -229,7 +249,7 @@ function Index() {
               >
                 <path
                   fill="currentColor"
-                  d="m5.157 13.069l4.611-4.685a.546.546 0 0 0 0-.768L5.158 2.93a.552.552 0 0 1 0-.771a.53.53 0 0 1 .759 0l4.61 4.684a1.65 1.65 0 0 1 0 2.312l-4.61 4.684a.53.53 0 0 1-.76 0a.552.552 0 0 1 0-.771"
+                  d="M5.157 13.069l4.611-4.685a.546.546 0 0 0 0-.768L5.158 2.93a.552.552 0 0 1 0-.771a.53.53 0 0 1 .759 0l4.61 4.684a1.65 1.65 0 0 1 0 2.312l-4.61 4.684a.53.53 0 0 1-.76 0a.552.552 0 0 1 0-.771"
                 />
               </svg>
             </div>
@@ -297,11 +317,12 @@ function Index() {
         </div>
 
         {/* Card Section */}
-        <div className="h-full ">
+        {/* Card Section */}
+        <div className="h-full">
           {activeTab === "transcript" && !isRecording && (
             <div className="h-full flex justify-center items-center">
-              <div className="p-4 flex justify-center items-center absolute">
-                <Card className="w-full px-4">
+              <div className="p-4 relative max-w-xl w-full">
+                <Card className="w-full">
                   <CardHeader className="flex justify-between items-center">
                     <div className="flex">
                       <h1 className="font-semibold mr-2">Documentation</h1>
@@ -336,30 +357,26 @@ function Index() {
                   <Divider className=" justify-center items-center" />
                   <CardBody className="flex justify-center items-center flex-col">
                     {showUploadContent ? (
-                      <div>
-                        <div className="justify-center items-center flex flex-col ">
-                          <Image src={file} alt="" className="mt-10" />
-                          <h1 className="font-semibold text-lg mt-2">
-                            Upload Audio
-                          </h1>
-                          <p className="text-center text-lg p-3 text-[#808080]">
-                            Supported files: MP3, WAV,M4A
-                          </p>
-                          <Button
-                            size="lg"
-                            className="w-[500px] bg-[#008080] mt-6 mb-6"
-                            onClick={handleUploadButtonClick}
-                          >
-                            <h1 className="text-white font-bold">
-                              Upload Audio
-                            </h1>
-                          </Button>
-                        </div>
+                      <div className="justify-center items-center flex flex-col ">
+                        <Image src={file} alt="" className="mt-10" />
+                        <h1 className="font-semibold text-lg mt-2">
+                          Upload Audio
+                        </h1>
+                        <p className="text-center text-lg p-3 text-[#808080]">
+                          Supported files: MP3, WAV, M4A
+                        </p>
+                        <Button
+                          size="lg"
+                          className="w-full md:w-[300px] bg-[#008080] mt-6 mb-6"
+                          onClick={handleUploadButtonClick}
+                        >
+                          <h1 className="text-white font-bold">Upload Audio</h1>
+                        </Button>
                       </div>
                     ) : (
                       <div className="justify-center items-center flex flex-col ">
                         <Image src={sound} alt="" className="mt-10" />
-                        <p className="text-center w-[500px] mt-6 p-3 text-[#808080]">
+                        <p className="text-center max-w-xl mt-6 p-3 text-[#808080]">
                           To ensure we can hear you, make sure your microphone
                           settings are correct
                         </p>
@@ -383,10 +400,14 @@ function Index() {
                           <div className="flex-1 h-[1px] bg-black"></div>
                         </div>
 
-                        <button type="button" onClick={handleUploadButtonClick}>
-                          <div className="flex mt-2 mb-6">
+                        <button
+                          type="button"
+                          onClick={handleUploadButtonClick}
+                          className="w-full md:w-[300px] mt-2 mb-6"
+                        >
+                          <div className="flex justify-center  mt-2">
                             <Image src={doc} alt="" className="mr-2" />
-                            <h1 className="font-semibold text-[#008080]  ">
+                            <h1 className="font-semibold text-[#008080]">
                               Upload Recordings
                             </h1>
                           </div>
@@ -404,12 +425,12 @@ function Index() {
                 <Card className="w-full bg-white">
                   <CardBody>
                     {/* Your "Note" content here */}
-                    <h1 className="mt-4 font-medium text-[#1E1E1E] ">
+                    <h1 className="mt-4 font-medium text-[#1E1E1E]">
                       PERSONALIZED NOTE
                     </h1>
 
                     <textarea
-                      className="p-2 h-28 rounded-lg bg-[#F6F4F0] mb-4 mt-4"
+                      className="p-2 h-28 rounded-lg bg-[#F6F4F0] mb-4 mt-4 w-full"
                       placeholder="Type anything here....."
                     />
                   </CardBody>
