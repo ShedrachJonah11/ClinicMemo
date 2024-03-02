@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Avatar,
   Button,
   Card,
   CardBody,
@@ -16,19 +15,20 @@ import {
   ModalBody,
   ModalFooter,
   useDisclosure,
+  Textarea,
 } from "@nextui-org/react";
 import Image from "next/image";
-import logo from "../../public/vetmemo.svg";
+
 import arrowback from "../../public/indent-decrease.svg";
-import plus from "../../public/plus.svg";
-import trash from "../../public/trash.svg";
-import star from "../../public/stars-02.svg";
+
 import record from "../../public/record-circle.svg";
 import doc from "../../public/document-upload.svg";
 import sound from "../../public/sound.svg";
 import edit from "../../public/edit-2.svg";
 import arrowdown from "../../public/arrow-down.svg";
 import file from "../../public/document-forward.svg";
+import Sidebar from "@/components/Sidebar";
+import SaveModal from "@/components/SaveModal";
 
 // Extend the Window interface to include SpeechRecognition
 interface Window {
@@ -56,10 +56,10 @@ declare global {
 function Index() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [activeTab, setActiveTab] = useState("transcript");
   const [transcript, setTranscript] = useState("");
   const [isRecording, setIsRecording] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [recordingDuration, setRecordingDuration] = useState(0);
 
@@ -97,7 +97,9 @@ function Index() {
   };
 
   // Function to stop recording
-  const stopRecording = () => {};
+  const stopRecording = () => {
+    onOpen();
+  };
 
   // Function to pause recording
   const pauseRecording = () => {};
@@ -125,150 +127,21 @@ function Index() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  const resetState = () => {
+    setShowUploadContent(false); // Reset the state to hide upload content
+    setTranscript(""); // Reset transcript
+    setIsRecording(false); // Reset recording state
+    setRecordingDuration(0); // Reset recording duration
+  };
+
   return (
     <div className="relative flex">
       {/* Sidebar */}
-      <div
-        className={`sidebar bg-white h-full w-96 fixed top-0 left-0 transition-transform duration-300 ease-in-out transform ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } flex flex-col`}
-        style={{ maxHeight: "100vh", overflowY: "auto" }}
-      >
-        {/* Sidebar Content */}
-        <div className="sidebar-content p-4 flex justify-between">
-          <Image src={logo} alt="logo" width={150} height={150} />
-          <button className="text-gray-700" onClick={toggleSidebar}>
-            <Image src={arrowback} alt="logo" width={30} height={30} />
-          </button>
-        </div>
-        {/* add document button  */}
-        <div className="px-4 mt-2">
-          <Button
-            size="lg"
-            className="border-1 border-[#ccc] bg-white w-full  flex justify-center items-center rounded-xl"
-          >
-            <Image src={plus} alt="plus" className="" />
-            <h1 className="text-center font-semibold">New Documentation</h1>
-          </Button>
-
-          <div className="mt-6">
-            <h4 className="font-regular text-[#8B909A] text-sm">TODAY</h4>
-
-            <Card className="bg-[#E5E8EC] p-3 mt-4">
-              <div className="flex justify-between">
-                <div>
-                  <h1 className="font-semibold">Documentation</h1>
-                  <p className=" font-light text-[#808080] text-sm">
-                    11:50Pm . 2 Mins Long
-                  </p>
-                </div>
-
-                <Image src={trash} alt="trash" className="delete-button" />
-              </div>
-            </Card>
-            <Card className="bg-[#E5E8EC] p-3 mt-4">
-              <div className="flex justify-between">
-                <div>
-                  <h1 className="font-semibold">Documentation</h1>
-                  <p className=" font-light text-[#808080] text-sm">
-                    11:50Pm . 2 Mins Long
-                  </p>
-                </div>
-
-                <button type="button" onClick={onOpen}>
-                  <Image src={trash} alt="trash" className="delete-button" />
-                </button>
-                <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
-                  <ModalContent>
-                    {(onClose) => (
-                      <>
-                        <ModalHeader className="flex flex-col gap-1">
-                          Are you sure you want to delete this
-                        </ModalHeader>
-                        <ModalBody>
-                          <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Nullam pulvinar risus non risus hendrerit
-                            venenatis. Pellentesque sit amet hendrerit risus,
-                            sed porttitor quam.
-                          </p>
-                        </ModalBody>
-                        <ModalFooter>
-                          <Button
-                            color="danger"
-                            variant="light"
-                            onPress={onClose}
-                          >
-                            Close
-                          </Button>
-                          <Button color="primary" onPress={onClose}>
-                            Delete
-                          </Button>
-                        </ModalFooter>
-                      </>
-                    )}
-                  </ModalContent>
-                </Modal>
-              </div>
-            </Card>
-            <h4 className="font-regular text-[#8B909A] mt-4 text-sm">
-              YESTERDAY
-            </h4>
-            <Card className="bg-[#E5E8EC] p-3 mt-4">
-              <div className="flex justify-between">
-                <div>
-                  <h1 className="font-semibold">Documentation</h1>
-                  <p className=" font-light text-[#808080] text-sm">
-                    11:50Pm . 2 Mins Long
-                  </p>
-                </div>
-
-                <Image src={trash} alt="trash" className="delete-button" />
-              </div>
-            </Card>
-          </div>
-        </div>
-
-        {/* Avatar section (moved to the bottom) */}
-        <div className="flex flex-col mb-2 mt-auto p-2 bg-white">
-          <button className="w-full flex py-2 px-2 bg-[#FBFBFB] rounded justify-between items-center ">
-            <div className="flex items-center mt-2">
-              <Avatar
-                src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-                size="lg"
-                className="mr-2"
-              />
-              <p className="mb-1 font-regular">John Deo</p>
-            </div>
-            <div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill="currentColor"
-                  d="M5.157 13.069l4.611-4.685a.546.546 0 0 0 0-.768L5.158 2.93a.552.552 0 0 1 0-.771a.53.53 0 0 1 .759 0l4.61 4.684a1.65 1.65 0 0 1 0 2.312l-4.61 4.684a.53.53 0 0 1-.76 0a.552.552 0 0 1 0-.771"
-                />
-              </svg>
-            </div>
-          </button>
-          <button className="w-full px-2 mt-2">
-            <div className="flex items-center">
-              <div className="w-14 h-14 justify-center items-center flex bg-[#D1FADF] mr-2 rounded-full">
-                <Image src={star} alt="star" />
-              </div>
-              <div className="text-start ">
-                <p className="mb-1 font-regular">Upgrade Plan</p>
-                <p className="font-light text-sm">
-                  Upgrade for access to additional features
-                </p>
-              </div>
-            </div>
-          </button>
-        </div>
-      </div>
+      <Sidebar
+        isSidebarOpen={isSidebarOpen}
+        toggleSidebar={toggleSidebar}
+        resetState={resetState}
+      />
 
       {/* Main Content */}
       <div
@@ -316,7 +189,6 @@ function Index() {
           </div>
         </div>
 
-        {/* Card Section */}
         {/* Card Section */}
         <div className="h-full">
           {activeTab === "transcript" && !isRecording && (
@@ -429,8 +301,8 @@ function Index() {
                       PERSONALIZED NOTE
                     </h1>
 
-                    <textarea
-                      className="p-2 h-28 rounded-lg bg-[#F6F4F0] mb-4 mt-4 w-full"
+                    <Textarea
+                      className=" rounded-lg  mb-4 mt-4"
                       placeholder="Type anything here....."
                     />
                   </CardBody>
@@ -439,6 +311,7 @@ function Index() {
             )}
           </div>
 
+          <SaveModal isOpen={isOpen} onClose={onClose} />
           {isRecording && (
             <div className="flex mt-6 justify-between p-4">
               <div className="p-4">
@@ -447,7 +320,7 @@ function Index() {
               </div>
               <div className="flex bg-[#E5E8EC] h-16 rounded-full px-6 py-2 gap-4 ">
                 {/* pause recording */}
-                <button onClick={stopRecording}>
+                <button onClick={pauseRecording}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="25"
@@ -462,7 +335,7 @@ function Index() {
                 </button>
 
                 {/* Stop recording */}
-                <button onClick={pauseRecording}>
+                <button onClick={stopRecording}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"

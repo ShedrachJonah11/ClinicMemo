@@ -7,16 +7,16 @@ import { Button, Avatar, AvatarGroup } from "@nextui-org/react";
 import arrowright from "../public/arrowright.svg";
 import "../app/style.css";
 
-function index() {
+function Index() {
   return (
     <div>
       <Nav />
 
       {/* Hero Section */}
-      <div className="flex h-full bg-[#FAF9F6] ">
+      <div className="flex flex-col lg:flex-row h-screen bg-[#FAF9F6] overflow-x-hidden">
         {/* Content */}
-        <div className="flex-1 flex flex-col  px-6  py-28 md:py-32 md:px-24">
-          <Button className="flex items-start gap-4 py-2 px-4 bg-[#FAE5D3] w-4/6  rounded-full">
+        <div className="flex-1 flex flex-col px-6 py-28 md:py-32 md:px-24 lg:px-32">
+          <Button className="flex items-start gap-4 py-2 px-4 bg-[#FAE5D3] w-4/6 rounded-full mb-8 lg:mb-0">
             <p className="text-[#808080] text-sm">
               Learn how AI can help you with documentation.
             </p>
@@ -35,7 +35,7 @@ function index() {
             Simplify documentation, enhance care, one pet at a time.
           </p>
 
-          <div className="flex items-center gap-4  mt-20">
+          <div className="flex items-center gap-4 mt-20">
             <Button className="bg-[#008080] px-8 py-6">
               <h1 className="text-white font-semibold">Get Started</h1>
             </Button>
@@ -90,7 +90,7 @@ function index() {
       {/* How it works */}
       <div className="h-screen bg-[#FAF9F6] relative flex flex-col py-32 px-28 overflow-y-auto">
         <h1 className="text-4xl font-medium mb-8">How It Works</h1>
-        <div className="flex justify-between">
+        <div className="flex justify-between items-start lg:items-center">
           <Button className="bg-[#008080] px-6 py-8">
             <AvatarGroup
               isBordered
@@ -107,7 +107,7 @@ function index() {
             <h1 className="text-white text-sm font-semibold">Get Started</h1>
           </Button>
 
-          <p className="text-[#808080] text-xl w-[600px]">
+          <p className="text-[#808080] text-xl lg:w-[600px]">
             Whether you're advanced with computers or not, you can simplify your
             documentation in minutes instead of hours.
           </p>
@@ -117,4 +117,4 @@ function index() {
   );
 }
 
-export default index;
+export default Index;
