@@ -1,4 +1,4 @@
-import Nav from "@/components/Nav";
+import Nav from "@/components/NavBar";
 import Image from "next/image";
 import React from "react";
 import doc from "../public/doc.png";
