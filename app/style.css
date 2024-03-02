@@ -11,3 +11,8 @@
 .card:hover .delete-button {
   visibility: visible;
 }
+
+.list-dot::before {
+  content: "•"; /* Unicode for bullet point */
+  margin-right: 8px; /* Adjust spacing between bullet point and text */
+}

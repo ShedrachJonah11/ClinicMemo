@@ -18,9 +18,13 @@ import {
   Textarea,
 } from "@nextui-org/react";
 import Image from "next/image";
+import "../../app/style.css";
 
-import arrowback from "../../public/indent-decrease.svg";
-
+import menu from "../../public/indent-decrease.svg";
+import menu2 from "../../public/menu2.svg";
+import mic from "../../public/icon-park-outline_voice.svg";
+import copy from "../../public/tabler_copy.svg";
+import copy2 from "../../public/white_copy.svg";
 import record from "../../public/record-circle.svg";
 import doc from "../../public/document-upload.svg";
 import sound from "../../public/sound.svg";
@@ -29,6 +33,7 @@ import arrowdown from "../../public/arrow-down.svg";
 import file from "../../public/document-forward.svg";
 import Sidebar from "@/components/Sidebar";
 import SaveModal from "@/components/SaveModal";
+import LeftSideBar from "@/components/LeftSideBar";
 
 // Extend the Window interface to include SpeechRecognition
 interface Window {
@@ -55,16 +60,22 @@ declare global {
 
 function Index() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
   const [activeTab, setActiveTab] = useState("transcript");
   const [transcript, setTranscript] = useState("");
   const [isRecording, setIsRecording] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showNoteCards, setShowNoteCards] = useState(false);
 
   const [recordingDuration, setRecordingDuration] = useState(0);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const toggleLeftSideBar = () => {
+    setIsLeftSidebarOpen(!isLeftSidebarOpen);
   };
 
   const handleLanguageChange = (language: string) => {
@@ -131,7 +142,13 @@ function Index() {
     setShowUploadContent(false); // Reset the state to hide upload content
     setTranscript(""); // Reset transcript
     setIsRecording(false); // Reset recording state
-    setRecordingDuration(0); // Reset recording duration
+    setRecordingDuration(0);
+    setShowNoteCards(false);
+  };
+
+  const handleHistoryCardClick = () => {
+    setShowNoteCards(true);
+    setActiveTab("note");
   };
 
   return (
@@ -141,13 +158,19 @@ function Index() {
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
         resetState={resetState}
+        handleHistoryCardClick={handleHistoryCardClick}
       />
 
       <SaveModal isOpen={isOpen} onClose={onClose} />
 
+      <LeftSideBar
+        isLeftSidebarOpen={isLeftSidebarOpen}
+        toggleLeftSidebar={toggleLeftSideBar}
+      />
+
       {/* Main Content */}
       <div
-        className={`transition-all duration-300 ease-in-out h-screen overflow-hidden flex-1 ${
+        className={`transition-all duration-300 ease-in-out h-screen flex-1 ${
           isSidebarOpen ? "ml-96 opacity-80" : ""
         } bg-[#FBFBFB]`}
       >
@@ -160,7 +183,7 @@ function Index() {
           {/* Button to toggle the sidebar */}
           {!isSidebarOpen && (
             <button className="text-gray-700" onClick={toggleSidebar}>
-              <Image src={arrowback} alt="logo" width={30} height={30} />
+              <Image src={menu} alt="logo" width={30} height={30} />
             </button>
           )}
 
@@ -189,6 +212,26 @@ function Index() {
               </div>
             </div>
           </div>
+
+          {activeTab === "note" && showNoteCards && (
+            <div className="gap-4 flex items-center">
+              <Button className="px-6 border" variant="light">
+                <h1 className=" ">Regenerate</h1>
+              </Button>
+              <Button className=" px-6 bg-[#008080]">
+                <Image src={copy2} alt="copy" />
+                <h1 className="text-white font-semibold">Copy Note</h1>
+              </Button>
+
+              <button
+                onClick={toggleLeftSideBar}
+                type="button"
+                className="ml-4"
+              >
+                <Image src={menu2} alt="" />
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Card Section */}
@@ -294,15 +337,142 @@ function Index() {
             </div>
           )}
           <div>
+            {activeTab === "note" && showNoteCards && (
+              <div className="p-4 justify-between flex-col sm:flex-row">
+                <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between mb-6">
+                  <Card className="w-full sm:w-1/2">
+                    <CardBody>
+                      <CardHeader>
+                        <h1 className="font-semibold">MAIN COMPLAINT</h1>
+                      </CardHeader>
+                      <div className="p-4">
+                        <p className="list-dot">Severe headaches</p>
+                        <p className="list-dot">Stomach aches</p>
+                      </div>
+                      <div className="flex p-4 gap-2">
+                        <button>
+                          <Image src={mic} alt="" />
+                        </button>
+                        <button>
+                          <Image src={copy} alt="" />
+                        </button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                  <Card className="w-full sm:w-1/2">
+                    <CardBody>
+                      <CardHeader>
+                        <h1 className="font-bold">MEDICAL HISTORY</h1>
+                      </CardHeader>
+                      <div className="p-4">
+                        <p className="list-dot">
+                          Patient reports to have had this since he was a kid
+                        </p>
+                      </div>
+                      <div className="flex p-4 gap-2">
+                        <button type="button">
+                          <Image src={mic} alt="" />
+                        </button>
+                        <button type="button">
+                          <Image src={copy} alt="" />
+                        </button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </div>
+
+                {/* Second Row */}
+                <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between mb-4">
+                  <Card className="w-full sm:w-1/2">
+                    <CardBody>
+                      <CardHeader>
+                        <h1 className="font-semibold">Doctor’s assessment</h1>
+                      </CardHeader>
+                      <div className="p-4">
+                        <p className="list-dot">Severe migraines</p>
+                      </div>
+                      <div className="flex p-4 gap-2">
+                        <button type="button">
+                          <Image src={mic} alt="" />
+                        </button>
+                        <button type="button">
+                          <Image src={copy} alt="" />
+                        </button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                  <Card className="w-full sm:w-1/2">
+                    <CardBody>
+                      <CardHeader>
+                        <h1 className="font-bold">PLAN</h1>
+                      </CardHeader>
+                      <div className="p-4">
+                        <p className="list-dot">
+                          Follow up appointment on 24th of this month
+                        </p>
+                      </div>
+                      <div className="flex p-4 gap-2">
+                        <button type="button">
+                          <Image src={mic} alt="" />
+                        </button>
+                        <button type="button">
+                          <Image src={copy} alt="" />
+                        </button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </div>
+                {/* Second Row */}
+                <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between">
+                  <Card className="w-full sm:w-1/2">
+                    <CardBody>
+                      <CardHeader>
+                        <h1 className="font-semibold">PRESCRIPTIONS</h1>
+                      </CardHeader>
+                      <div className="p-4">
+                        <p className="list-dot">50 dosage of ibuprofen</p>
+                      </div>
+                      <div className="flex p-4 gap-2">
+                        <button type="button">
+                          <Image src={mic} alt="" />
+                        </button>
+                        <button type="button">
+                          <Image src={copy} alt="" />
+                        </button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                  <Card className="w-full sm:w-1/2">
+                    <CardBody>
+                      <CardHeader>
+                        <h1 className="font-bold">APPOINTMENT</h1>
+                      </CardHeader>
+                      <div className="p-4">
+                        <p className="list-dot">
+                          follow up check on the 24th February
+                        </p>
+                      </div>
+                      <div className="flex p-4 gap-2">
+                        <button type="button">
+                          <Image src={mic} alt="" />
+                        </button>
+                        <button type="button">
+                          <Image src={copy} alt="" />
+                        </button>
+                      </div>
+                    </CardBody>
+                  </Card>
+                </div>
+              </div>
+            )}
             {activeTab === "note" && (
-              <div className="p-4">
+              <div className="p-4 mt-4">
                 <Card className="w-full bg-white">
                   <CardBody>
                     {/* Your "Note" content here */}
                     <h1 className="mt-4 font-medium text-[#1E1E1E]">
                       PERSONALIZED NOTE
                     </h1>
-
                     <Textarea
                       className=" rounded-lg  mb-4 mt-4"
                       placeholder="Type anything here....."
@@ -313,7 +483,7 @@ function Index() {
             )}
           </div>
 
-          {isRecording && (
+          {activeTab === "transcript" && isRecording && (
             <div className="flex mt-6 justify-between p-4">
               <div className="p-4">
                 {/* <p>{recordingDuration}</p> */}
@@ -321,7 +491,7 @@ function Index() {
               </div>
               <div className="flex bg-[#E5E8EC] h-16 rounded-full px-6 py-2 gap-4 ">
                 {/* pause recording */}
-                <button onClick={pauseRecording}>
+                <button type="button" onClick={pauseRecording}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="25"
@@ -336,7 +506,7 @@ function Index() {
                 </button>
 
                 {/* Stop recording */}
-                <button onClick={stopRecording}>
+                <button type="button" onClick={stopRecording}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
@@ -351,7 +521,7 @@ function Index() {
                 </button>
 
                 {/* Hold Recording */}
-                <button onClick={resumeRecording}>
+                <button type="button" onClick={resumeRecording}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="25"

@@ -21,18 +21,25 @@ interface SliderProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
   resetState: () => void;
+  handleHistoryCardClick: () => void;
 }
 
 const Sidebar: React.FC<SliderProps> = ({
   isSidebarOpen,
   toggleSidebar,
   resetState,
+  handleHistoryCardClick,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isHovered, setIsHovered] = useState(false);
 
   const handleResetState = () => {
     resetState(); // Call resetState function
+  };
+
+  const handleHistoryClick = () => {
+    // Call the handleHistoryCardClick function passed from the parent component
+    handleHistoryCardClick();
   };
 
   return (
@@ -60,20 +67,21 @@ const Sidebar: React.FC<SliderProps> = ({
           <h1 className="text-center font-semibold">New Documentation</h1>
         </Button>
 
-        {/* History */}
+        {/* History Cards */}
         <div className="mt-6">
           <h4 className="font-regular text-[#8B909A] text-sm">TODAY</h4>
-          <Card
-            className={`bg-[#E5E8EC] p-3 mt-4 ${
+          <button
+            className={`bg-[#E5E8EC] rounded-xl w-full p-3 mt-4 ${
               isHovered ? "bg-gray-300" : ""
             }`}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            onClick={handleHistoryClick}
           >
-            <div className="flex justify-between">
+            <div className="flex items-center justify-between">
               <div>
-                <h1 className="font-semibold">Documentation</h1>
-                <p className=" font-light text-[#808080] text-sm">
+                <h1 className="font-semibold mr-6">Documentation</h1>
+                <p className="font-light text-[#808080] text-sm">
                   11:50Pm . 2 Mins Long
                 </p>
               </div>
@@ -85,7 +93,7 @@ const Sidebar: React.FC<SliderProps> = ({
               )}
               <DeleteModal isOpen={isOpen} onClose={onClose} />
             </div>
-          </Card>
+          </button>
           <h4 className="font-regular text-[#8B909A] mt-4 text-sm">
             YESTERDAY
           </h4>

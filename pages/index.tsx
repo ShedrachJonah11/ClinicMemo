@@ -1,4 +1,4 @@
-import Nav from "@/components/nav";
+import Nav from "@/components/Nav";
 import Image from "next/image";
 import React from "react";
 import doc from "../public/doc.png";
@@ -12,7 +12,6 @@ function Index() {
   return (
     <div>
       <Nav />
-
       {/* Hero Section */}
       <div className="flex flex-col lg:flex-row h-screen bg-[#FAF9F6] overflow-x-hidden">
         {/* Content */}
