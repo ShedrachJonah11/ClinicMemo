@@ -23,7 +23,7 @@ const SaveModal: React.FC<SaveModalProps> = ({ isOpen, onClose }) => {
         <ModalHeader className="flex flex-col gap-1">Save session</ModalHeader>
         <ModalBody>
           <p className="text-center">
-            If you're done recording, save the file to have easy access.
+            If you&apos;re done recording, save the file to have easy access.
           </p>
         </ModalBody>
         <ModalFooter>

@@ -108,8 +108,8 @@ function Index() {
           </Button>
 
           <p className="text-[#808080] text-xl lg:w-[600px]">
-            Whether you're advanced with computers or not, you can simplify your
-            documentation in minutes instead of hours.
+            Whether you&apos;re advanced with computers or not, you can simplify
+            your documentation in minutes instead of hours.
           </p>
         </div>
       </div>

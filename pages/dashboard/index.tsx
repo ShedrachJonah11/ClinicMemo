@@ -143,6 +143,8 @@ function Index() {
         resetState={resetState}
       />
 
+      <SaveModal isOpen={isOpen} onClose={onClose} />
+
       {/* Main Content */}
       <div
         className={`transition-all duration-300 ease-in-out h-screen overflow-hidden flex-1 ${
@@ -311,7 +313,6 @@ function Index() {
             )}
           </div>
 
-          <SaveModal isOpen={isOpen} onClose={onClose} />
           {isRecording && (
             <div className="flex mt-6 justify-between p-4">
               <div className="p-4">
