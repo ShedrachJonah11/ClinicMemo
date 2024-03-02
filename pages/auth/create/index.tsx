@@ -44,15 +44,15 @@ function Index() {
             <CardBody className="justify-center items-center">
               <p>Sign up with Apple</p>
             </CardBody>
-            <div className="flex justify-center items-center">
-              <p className="flex">
-                Have an account already?
-                <Link href={"/auth/login"} className="ml-1 text-[#008080]">
-                  Login
-                </Link>
-              </p>
-            </div>
           </Card>
+          <div className="flex justify-center items-center">
+            <p className="flex">
+              Have an account already?
+              <Link href={"/auth/login"} className="ml-1 text-[#008080]">
+                Login
+              </Link>
+            </p>
+          </div>
         </CardBody>
       </Card>
     </div>

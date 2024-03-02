@@ -3,8 +3,6 @@ import { NextUIProvider } from "@nextui-org/react";
 import { AppProps } from "next/app";
 import Head from "next/head";
 import { AppContext, ContextProvider } from "@/utils/AppContext";
-import Nav from "@/components/nav";
-import Footer from "@/components/footer";
 import "../app/globals.css";
 
 function App({ Component, pageProps }: AppProps) {

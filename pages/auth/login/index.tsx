@@ -71,7 +71,7 @@ function Index() {
           </Card>
           <div className="flex justify-center items-center">
             <p className="flex">
-              Don't have an account already?
+              Don&apos;t have an account already?
               <Link href={"/auth/signup"} className="ml-1 text-[#008080]">
                 Signup
               </Link>
