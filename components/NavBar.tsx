@@ -6,12 +6,12 @@ import {
   NavbarMenuItem,
   NavbarMenu,
   NavbarContent,
-  Link,
   NavbarItem,
   Button,
 } from "@nextui-org/react";
 import Image from "next/image";
 import logo from "../public/vetmemo.svg";
+import Link from "next/link";
 
 export default function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -55,22 +55,32 @@ export default function Nav() {
       ) : (
         <NavbarContent className="flex items-center ml-">
           <NavbarItem>
-            <h1 className="text-black mr-6">Home</h1>
+            <Link href={""}>
+              <h1 className="text-black mr-6">Home</h1>
+            </Link>
           </NavbarItem>
           <NavbarItem>
-            <h1 className="text-black mr-6">About us</h1>
+            <Link href={""}>
+              <h1 className="text-black mr-6">About us</h1>
+            </Link>
           </NavbarItem>
           <NavbarItem>
-            <h1 className="text-black">Pricing</h1>
+            <Link href={""}>
+              <h1 className="text-black">Pricing</h1>
+            </Link>
           </NavbarItem>
 
           {/* Right  */}
           <div className="ml-auto flex items-center">
-            <NavbarItem as={Link} className="mr-4">
-              <h1 className="text-black font-semibold">Login</h1>
+            <NavbarItem className="mr-4">
+              <Link href={"/auth/login"} className="text-black font-semibold">
+                Login
+              </Link>
             </NavbarItem>
             <Button size="md" className="bg-[#008080] px-6">
-              <h1 className="text-white font-semibold">Get Started</h1>
+              <Link href={"/auth/create"}>
+                <h1 className="text-white font-semibold">Get Started</h1>
+              </Link>
             </Button>
           </div>
         </NavbarContent>

@@ -17,7 +17,7 @@ interface DeleteModalProps {
 
 const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose }) => {
   return (
-    <Modal isOpen={isOpen} onOpenChange={onClose}>
+    <Modal backdrop="opaque" isOpen={isOpen} onOpenChange={onClose}>
       <ModalContent>
         <ModalHeader className="flex flex-col gap-1">
           Delete this conversation?

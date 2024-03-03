@@ -1,8 +1,10 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import menu2 from "../public/menu2.svg";
-import { useState } from "react";
 import { Button, Card, CardBody, Textarea } from "@nextui-org/react";
+import copy2 from "../public/white_copy.svg";
+import note from "../public/note.svg";
+import magicpen from "../public/magicpen.svg";
 
 interface SliderProps {
   isLeftSidebarOpen: boolean;
@@ -15,14 +17,21 @@ const LeftSideBar: React.FC<SliderProps> = ({
 }) => {
   const sizes = ["sm"];
   const [activeTab, setActiveTab] = useState("he");
+  const [dropdownValue, setDropdownValue] = useState("Soup");
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
 
+  const handleDropdownChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setDropdownValue(event.target.value);
+  };
+
   return (
     <div
-      className={`sidebar bg-white h-full p-4 w-96 fixed top-0 right-0 opacity-90 z-10 transition-transform duration-300 ease-in-out transform ${
+      className={`sidebar bg-white h-full p-4 sm:w-[400px] fixed top-0 right-0 opacity-95 z-10 transition-transform duration-300 ease-in-out transform ${
         isLeftSidebarOpen ? "translate-x-0 " : "translate-x-full"
       } flex flex-col `}
       style={{ maxHeight: "100vh", overflowY: "auto" }}
@@ -34,7 +43,7 @@ const LeftSideBar: React.FC<SliderProps> = ({
       )}
 
       <div className="p-4">
-        <h1 className="mb-2 font-medium text-lg">Pronous</h1>
+        <h1 className="mb-2 font-medium text-lg">Pronouns</h1>
         <div>
           <div className="flex  gap-4">
             {sizes.map((size) => (
@@ -76,27 +85,68 @@ const LeftSideBar: React.FC<SliderProps> = ({
       </div>
 
       <div>
-        <Card>
+        <Card className="bg-[#FAF9F6] mb-4">
           <CardBody>
-            <h1>Advanced Options</h1>
+            <h1 className="font-medium mb-6 text-lg">Advanced Options</h1>
+            <p className="text-xs mb-2 font-medium text-[#008080]">TEMPLATE</p>
+            <select
+              className="w-full p-4 bg-white rounded-md mb-4"
+              value={dropdownValue}
+              onChange={handleDropdownChange}
+            >
+              <option value="Soup">Soup</option>
+            </select>
+
+            <p className="text-xs mb-2 font-medium text-[#008080]">STYLE</p>
+            <select
+              className="w-full p-4 bg-white rounded-xl mb-4"
+              name=""
+              id=""
+            >
+              <option value="Bullet Point">Bullet Point</option>
+            </select>
           </CardBody>
         </Card>
       </div>
       <div>
-        <Card>
+        <Card className="bg-[#FAF9F6] mb-4">
           <CardBody>
-            <h1>Custom instructions</h1>
-            <Textarea />
-            <Button>Generate</Button>
+            <div className="flex items-center mb-4">
+              <Image src={magicpen} alt="magicpen" className="mr-2" />
+              <h1 className="text-xl font-medium">Custom instructions</h1>
+            </div>
+            <div className="p-2 bg-white mb-2 rounded-xl">
+              <p>Add more details to the plan section</p>
+            </div>
+            <div className="p-2 bg-white mb-2 rounded-xl">
+              <p>Add more details to the plan section</p>
+            </div>
+            <div className="p-2 bg-white mb-2 rounded-xl">
+              <p>Add more details to the plan section</p>
+            </div>
+
+            <Textarea
+              placeholder="Use an example above or enter your own instructions"
+              className="mb-2"
+            />
+            <Button className="bg-[#008080]">
+              <p className="text-white">Generate</p>
+            </Button>
           </CardBody>
         </Card>
       </div>
       <div>
-        <Card>
+        <Card className="bg-[#FAF9F6] mb-4">
           <CardBody>
-            <h1>Patient instructions</h1>
-            <Textarea />
-            <Button>Copy Note</Button>
+            <div className="flex items-center mb-4">
+              <Image src={note} alt="note" className="mr-2" />
+              <h1 className="text-xl font-medium">Patient instructions</h1>
+            </div>
+            <Textarea placeholder="Based on your conversation, i have jotted down some things to take into consideration" />
+            <Button className="mt-4 px-6 bg-[#008080]">
+              <Image src={copy2} alt="copy" />
+              <h1 className="text-white font-semibold">Copy Note</h1>
+            </Button>
           </CardBody>
         </Card>
       </div>

@@ -16,6 +16,12 @@ import {
   Divider,
 } from "@nextui-org/react";
 import DeleteModal from "./DeleteModal";
+import PaymentPlanModal from "./PaymentPlanModal";
+import "../app/style.css";
+import settings from "../public/settings.svg";
+import help from "../public/help.svg";
+import tag from "../public/tag-user.svg";
+import sign from "../public/sign out.svg";
 
 interface SliderProps {
   isSidebarOpen: boolean;
@@ -30,7 +36,16 @@ const Sidebar: React.FC<SliderProps> = ({
   resetState,
   handleHistoryCardClick,
 }) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isDeleteModalOpen,
+    onOpen: onDeleteModalOpen,
+    onClose: onDeleteModalClose,
+  } = useDisclosure();
+  const {
+    isOpen: isPaymentModalOpen,
+    onOpen: onPaymentModalOpen,
+    onClose: onPaymentModalClose,
+  } = useDisclosure();
   const [isHovered, setIsHovered] = useState(false);
 
   const handleResetState = () => {
@@ -87,11 +102,14 @@ const Sidebar: React.FC<SliderProps> = ({
               </div>
 
               {isHovered && (
-                <button type="button" onClick={onOpen}>
+                <button type="button" onClick={onDeleteModalOpen}>
                   <Image src={trash} alt="trash" className="delete-button" />
                 </button>
               )}
-              <DeleteModal isOpen={isOpen} onClose={onClose} />
+              <DeleteModal
+                isOpen={isDeleteModalOpen}
+                onClose={onDeleteModalClose}
+              />
             </div>
           </button>
           <h4 className="font-regular text-[#8B909A] mt-4 text-sm">
@@ -103,13 +121,9 @@ const Sidebar: React.FC<SliderProps> = ({
       <div className="flex flex-col mb-2 mt-auto p-2 bg-white">
         <Popover
           showArrow
-          backdrop="opaque"
-          placement="right"
+          placement="top"
           classNames={{
-            base: [
-              // arrow color
-              "before:bg-default-200",
-            ],
+            base: ["before:bg-default-200"],
             content: [
               "py-3 px-4 border border-default-200",
               "bg-gradient-to-br from-white to-default-300",
@@ -183,26 +197,77 @@ const Sidebar: React.FC<SliderProps> = ({
                 </div>
                 <Divider />
 
-                <div></div>
+                <div>
+                  <button className="flex p-2 items-center mt-2 mb-4">
+                    <Image
+                      src={settings}
+                      alt=""
+                      width={25}
+                      height={25}
+                      className="mr-4"
+                    />
+                    <h1 className="text-base font-medium">Account</h1>
+                  </button>
+                  <button className="flex p-2 items-center mb-4">
+                    <Image
+                      src={tag}
+                      alt=""
+                      width={25}
+                      height={25}
+                      className="mr-4"
+                    />
+                    <h1 className="text-base font-medium">Preferences</h1>
+                  </button>
+                  <button className="flex p-2 items-center mb-4">
+                    <Image
+                      src={help}
+                      alt=""
+                      width={25}
+                      height={25}
+                      className="mr-4"
+                    />
+                    <h1 className="text-base font-medium">Contact Us</h1>
+                  </button>
+                  <Divider />
+                  <button className="flex p-2 items-center mb-4">
+                    <Image
+                      src={sign}
+                      alt=""
+                      width={25}
+                      height={25}
+                      className="mr-4"
+                    />
+                    <h1 className="text-base font-medium">Sign Out</h1>
+                  </button>
+                </div>
               </div>
             )}
           </PopoverContent>
         </Popover>
         {/* Profile button */}
 
-        <button className="w-full px-2 mt-4">
+        <button
+          type="button"
+          onClick={onPaymentModalOpen}
+          className="w-full px-2 py-2 mt-4 rounded-xl upgrade-button"
+        >
           <div className="flex items-center">
             <div className="w-14 h-14 justify-center items-center flex bg-[#D1FADF] mr-2 rounded-full">
               <Image src={star} alt="star" />
             </div>
             <div className="text-start ">
-              <p className="mb-1 font-regular">Upgrade Plan</p>
+              <p className="mb-1 font-medium">Upgrade Plan</p>
               <p className="font-light text-sm">
                 Upgrade for access to additional features
               </p>
             </div>
           </div>
         </button>
+
+        <PaymentPlanModal
+          isOpen={isPaymentModalOpen}
+          onClose={onPaymentModalClose}
+        />
       </div>
     </div>
   );

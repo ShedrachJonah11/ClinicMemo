@@ -239,7 +239,7 @@ function Index() {
           {activeTab === "transcript" && !isRecording && (
             <div className="h-full flex justify-center items-center">
               <div className="p-4 relative max-w-xl w-full">
-                <Card className="w-full">
+                <Card className="w-full lg:w-[450px]">
                   <CardHeader className="flex justify-between items-center">
                     <div className="flex">
                       <h1 className="font-semibold mr-2">Documentation</h1>
@@ -271,7 +271,7 @@ function Index() {
                       </DropdownMenu>
                     </Dropdown>
                   </CardHeader>
-                  <Divider className=" justify-center items-center" />
+                  <Divider className="" />
                   <CardBody className="flex justify-center items-center flex-col">
                     {showUploadContent ? (
                       <div className="justify-center items-center flex flex-col ">
