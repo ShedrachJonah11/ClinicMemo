@@ -40,7 +40,7 @@ export default function Nav() {
   };
 
   return (
-    <Navbar maxWidth="xl" className="shadow p-0 md:px-6 top-[0] bg-white ">
+    <Navbar maxWidth="xl" className="shadow p-0 md:px-6 top-[0] bg-[#FAF9F6] ">
       <NavbarBrand
         className="w-fit flex-grow-[0.2] md:flex-grow-[0.6] "
         as={Link}
