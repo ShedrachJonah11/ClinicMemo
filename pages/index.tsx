@@ -49,14 +49,15 @@ function Index() {
         <div className="flex flex-col lg:flex-row h-full bg-[#FAF9F6] overflow-x-hidden">
           {/* Content */}
           <div className="flex-1 flex flex-col px-6 py-28 md:py-32 md:px-24 lg:px-32">
-            <Button className="flex items-start gap-4 py-2 px-4 bg-[#FAE5D3] rounded-full mb-8 lg:mb-0">
-              <p className="text-[#808080] text-sm">
+            <button className="flex items-center justify-between gap-4 py-2 px-4 bg-[#FAE5D3] rounded-full mb-8 lg:mb-0 lg:w-[400px] w-96">
+              <p className="text-[#808080] text-xs   lg:text-sm">
                 Learn how AI can help you with documentation.
               </p>
               <div className="bg-[#FBEADA] px-4 rounded-full p-2">
                 <Image src={arrowright} alt="" />
               </div>
-            </Button>
+            </button>
+
             <h1 className="text-5xl lg:text-7xl font-semibold mt-16 mb-4">
               Innovating Veterinary Documentation!
             </h1>
@@ -280,10 +281,36 @@ function Index() {
             </div>
           </div>
           {/* Testimonies */}
-          <div className="flex gap-4 px-10 justify-center">
-            <Image src={ellipse} alt="bg" className="z-10 absolute" />
+          <div className=" gap-4 px-10 items-center flex flex-col justify-center">
+            <Image
+              src={ellipse}
+              alt="bg"
+              className="z-10 absolute hidden md:block"
+            />
             {/* First section */}
-            <div className="flex-col flex">
+            <div className="flex flex-col gap-4 md:flex-row md:gap-9 mb-4">
+              <Card className=" w-80 mb-2">
+                <CardHeader className="flex gap-3">
+                  <div className="p-2">
+                    <div className="flex items-center mb-6">
+                      <div className=" justify-center items-center flex  mr-2 rounded-full">
+                        <Avatar />
+                      </div>
+                      <div className="text-start ">
+                        <p className="mb-1 font-medium">Shedrach Jonah</p>
+                        <p className="font-light text-sm">CEO</p>
+                      </div>
+                    </div>
+                    <p>
+                      As a healthcare solutions provider, we constantly seek
+                      tools that enhance our services. This platform has become
+                      an indispensable asset, offering a powerful blend of AI
+                      technology and user-friendly design. It&apos;s a win-win
+                      for both our clients and us.
+                    </p>
+                  </div>
+                </CardHeader>
+              </Card>
               <Card className=" w-80 mb-2">
                 <CardHeader className="flex gap-3">
                   <div className="p-2">
@@ -352,7 +379,7 @@ function Index() {
               </Card>
             </div>
             {/* Section Section */}
-            <div className="flex-col flex">
+            <div className="gap-9 hidden md:flex">
               <Card className=" w-80 mb-2">
                 <CardHeader className="flex gap-3">
                   <div className="p-2">
@@ -375,123 +402,6 @@ function Index() {
                   </div>
                 </CardHeader>
               </Card>
-              <Card className=" w-80 mb-2">
-                <CardHeader className="flex gap-3">
-                  <div className="p-2">
-                    <div className="flex items-center mb-6">
-                      <div className=" justify-center items-center flex  mr-2 rounded-full">
-                        <Avatar />
-                      </div>
-                      <div className="text-start ">
-                        <p className="mb-1 font-medium">Shedrach Jonah</p>
-                        <p className="font-light text-sm">CEO</p>
-                      </div>
-                    </div>
-                    <p>
-                      As a healthcare solutions provider, we constantly seek
-                      tools that enhance our services. This platform has become
-                      an indispensable asset, offering a powerful blend of AI
-                      technology and user-friendly design. It&apos;s a win-win
-                      for both our clients and us.
-                    </p>
-                  </div>
-                </CardHeader>
-              </Card>
-              <Card className=" w-80 mb-2">
-                <CardHeader className="flex gap-3">
-                  <div className="p-2">
-                    <div className="flex items-center mb-6">
-                      <div className=" justify-center items-center flex  mr-2 rounded-full">
-                        <Avatar />
-                      </div>
-                      <div className="text-start ">
-                        <p className="mb-1 font-medium">Shedrach Jonah</p>
-                        <p className="font-light text-sm">CEO</p>
-                      </div>
-                    </div>
-                    <p>
-                      As a healthcare solutions provider, we constantly seek
-                      tools that enhance our services. This platform has become
-                      an indispensable asset, offering a powerful blend of AI
-                      technology and user-friendly design. It&apos;s a win-win
-                      for both our clients and us.
-                    </p>
-                  </div>
-                </CardHeader>
-              </Card>
-            </div>
-            {/* Third section */}
-            <div className="flex-col flex">
-              <Card className=" w-80 mb-2">
-                <CardHeader className="flex gap-3">
-                  <div className="p-2">
-                    <div className="flex items-center mb-6">
-                      <div className=" justify-center items-center flex  mr-2 rounded-full">
-                        <Avatar />
-                      </div>
-                      <div className="text-start ">
-                        <p className="mb-1 font-medium">Shedrach Jonah</p>
-                        <p className="font-light text-sm">CEO</p>
-                      </div>
-                    </div>
-                    <p>
-                      As a healthcare solutions provider, we constantly seek
-                      tools that enhance our services. This platform has become
-                      an indispensable asset, offering a powerful blend of AI
-                      technology and user-friendly design. It&apos;s a win-win
-                      for both our clients and us.
-                    </p>
-                  </div>
-                </CardHeader>
-              </Card>
-              <Card className=" w-80 mb-2">
-                <CardHeader className="flex gap-3">
-                  <div className="p-2">
-                    <div className="flex items-center mb-6">
-                      <div className=" justify-center items-center flex  mr-2 rounded-full">
-                        <Avatar />
-                      </div>
-                      <div className="text-start ">
-                        <p className="mb-1 font-medium">Shedrach Jonah</p>
-                        <p className="font-light text-sm">CEO</p>
-                      </div>
-                    </div>
-                    <p>
-                      As a healthcare solutions provider, we constantly seek
-                      tools that enhance our services. This platform has become
-                      an indispensable asset, offering a powerful blend of AI
-                      technology and user-friendly design. It&apos;s a win-win
-                      for both our clients and us.
-                    </p>
-                  </div>
-                </CardHeader>
-              </Card>
-              <Card className=" w-80 mb-2">
-                <CardHeader className="flex gap-3">
-                  <div className="p-2">
-                    <div className="flex items-center mb-6">
-                      <div className=" justify-center items-center flex  mr-2 rounded-full">
-                        <Avatar />
-                      </div>
-                      <div className="text-start ">
-                        <p className="mb-1 font-medium">Shedrach Jonah</p>
-                        <p className="font-light text-sm">CEO</p>
-                      </div>
-                    </div>
-                    <p>
-                      As a healthcare solutions provider, we constantly seek
-                      tools that enhance our services. This platform has become
-                      an indispensable asset, offering a powerful blend of AI
-                      technology and user-friendly design. It&apos;s a win-win
-                      for both our clients and us.
-                    </p>
-                  </div>
-                </CardHeader>
-              </Card>
-            </div>
-
-            {/* Third section */}
-            <div className="flex-col flex">
               <Card className=" w-80 mb-2">
                 <CardHeader className="flex gap-3">
                   <div className="p-2">
@@ -561,7 +471,7 @@ function Index() {
             </div>
           </div>
         </div>
-        <div className="px-4 md:px-10 lg:px-20 py-8 md:py-10 lg:py-16 bg-[#FAF9F6]">
+        <div className="px-4  md:px-10 lg:px-20 py-8 md:py-10 lg:py-32 bg-[#FAF9F6]">
           <Card className="bg-[#008080] w-full">
             <CardBody>
               <div className="flex flex-col md:flex-row justify-between items-center py-8 md:py-12 lg:py-16 px-6 md:px-10 lg:px-20">

@@ -40,7 +40,7 @@ function Footer() {
               </p>
             </div>
             <Button size="md" className="bg-white w-52 font-semibold">
-              Contact Us
+              <Link href="/contact">Contact Us</Link>
             </Button>
           </div>
         </div>
