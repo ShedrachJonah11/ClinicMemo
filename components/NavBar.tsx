@@ -83,12 +83,12 @@ export default function Nav() {
           {/* Right  */}
           <div className="ml-auto flex items-center">
             <NavbarItem className="mr-4">
-              <Link href={"/auth/login"} className="text-black font-semibold">
+              <Link href={"/auth/login"} className="text-black font-medium">
                 Login
               </Link>
             </NavbarItem>
             <Button size="md" className="bg-[#008080] px-6">
-              <Link href={"/auth/create"}>
+              <Link href={"/auth/welcome"}>
                 <h1 className="text-white font-semibold">Get Started</h1>
               </Link>
             </Button>

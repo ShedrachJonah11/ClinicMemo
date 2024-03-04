@@ -71,7 +71,7 @@ function Index() {
 
             <div className="flex items-center gap-4 mt-20">
               <Button className="bg-[#008080] px-8 py-6">
-                <Link href="/auth/create">
+                <Link href={"/auth/welcome"}>
                   <h1 className="text-white font-semibold">Get Started</h1>
                 </Link>
               </Button>
