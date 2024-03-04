@@ -58,9 +58,11 @@ export default function Verify() {
             className=""
           />
 
-          <Button size="lg" className="w-full mt-6 bg-[#008080]">
-            <p className="text-white text-semibold">Sign in with code</p>
-          </Button>
+          <Link href={"/auth/dashboard"} className="w-full">
+            <Button size="lg" className="w-full mt-6 bg-[#008080]">
+              <p className="text-white text-semibold">Sign in with code</p>
+            </Button>
+          </Link>
 
           <div className="flex justify-center mt-4 items-center">
             <p className="flex">

@@ -20,11 +20,11 @@ function Index() {
             Get a structured medical note from your encounter, in seconds
           </p>
 
-          <Button size="lg" className="w-full mt-2 bg-[#008080]">
-            <Link href={"/auth/create"}>
+          <Link href={"/auth/create"} className="w-full">
+            <Button size="lg" className="w-full mt-2 bg-[#008080]">
               <p className="text-white text-semibold ">Try VetMemo</p>
-            </Link>
-          </Button>
+            </Button>
+          </Link>
 
           <div className="flex justify-center mt-4 items-center">
             <p className="flex ">

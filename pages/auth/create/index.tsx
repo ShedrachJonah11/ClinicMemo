@@ -32,11 +32,11 @@ function Index() {
             className=""
           />
 
-          <Button size="lg" className="w-full mt-6 bg-[#008080]">
-            <Link href="/auth/verify">
+          <Link href="/auth/verify" className="w-full">
+            <Button size="lg" className="w-full mt-6 bg-[#008080]">
               <p className="text-white text-semibold ">Next</p>
-            </Link>
-          </Button>
+            </Button>
+          </Link>
 
           <div className="flex items-center mt-6 mb-4">
             <div className="flex-1 border-t border-black"></div>
