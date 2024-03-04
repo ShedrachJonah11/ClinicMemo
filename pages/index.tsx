@@ -1,6 +1,7 @@
+"use client";
 import Nav from "@/components/NavBar";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import doc from "../public/doc.png";
 import slash from "../public/slash.svg";
 import {
@@ -10,6 +11,9 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Switch,
+  Divider,
+  Spacer,
 } from "@nextui-org/react";
 import arrowright from "../public/arrowright.svg";
 import "../app/style.css";
@@ -26,24 +30,34 @@ import star from "../public/starr.svg";
 import stars from "../public/yellowstar.svg";
 import bgsec from "../public/bgsec.svg";
 import ellipse from "../public/ellipse.svg";
+import { motion, useScroll } from "framer-motion";
+import check from "../public/check .svg";
+import checkx from "../public/checkX.svg";
+import Footer from "@/components/footer";
 
 function Index() {
+  const [isYearlyBilling, setIsYearlyBilling] = useState(true);
+
+  const toggleBillingCycle = () => {
+    setIsYearlyBilling((prev) => !prev);
+  };
   return (
     <div>
       <Nav />
       {/* Hero Section */}
       <section>
-        <div className="flex flex-col lg:flex-row h-screen bg-[#FAF9F6] overflow-x-hidden">
+        <div className="flex flex-col lg:flex-row h-full bg-[#FAF9F6] overflow-x-hidden">
           {/* Content */}
           <div className="flex-1 flex flex-col px-6 py-28 md:py-32 md:px-24 lg:px-32">
-            <Button className="flex items-start gap-4 py-2 px-4 bg-[#FAE5D3] rounded-full mb-8 lg:mb-0">
-              <p className="text-[#808080] text-sm">
+            <button className="flex items-center justify-between gap-4 py-2 px-4 bg-[#FAE5D3] rounded-full mb-8 lg:mb-0 lg:w-[400px] w-96">
+              <p className="text-[#808080] text-xs   lg:text-sm">
                 Learn how AI can help you with documentation.
               </p>
               <div className="bg-[#FBEADA] px-4 rounded-full p-2">
                 <Image src={arrowright} alt="" />
               </div>
-            </Button>
+            </button>
+
             <h1 className="text-5xl lg:text-7xl font-semibold mt-16 mb-4">
               Innovating Veterinary Documentation!
             </h1>
@@ -71,44 +85,43 @@ function Index() {
             <Image src={doc} alt="Background" width={600} height={600} />
           </div>
         </div>
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-6 bg-[#FAF9F6]">
+          {/* First column */}
+          <div className="flex flex-col items-center">
+            <div className="text-center font-semibold text-2xl mb-4">
+              120 Minutes
+            </div>
+            <p className="text-center text-lg text-[#808080] w-80">
+              Clinicmemo saves doctors time on clinical documentation.
+            </p>
+          </div>
+
+          {/* Vertical line */}
+          <div className="hidden lg:block h-20 border-l border-[#808080]"></div>
+
+          {/* Second column */}
+          <div className="flex flex-col items-center">
+            <div className="text-center font-semibold text-2xl mb-4">95%</div>
+            <p className="text-center text-lg text-[#808080] w-80">
+              Clinicmemo significantly reduces fatigue for many clinicians using
+              us.
+            </p>
+          </div>
+
+          {/* Vertical line */}
+          <div className="hidden lg:block h-20 border-l border-[#808080]"></div>
+
+          {/* Third column */}
+          <div className="flex flex-col items-center">
+            <div className="text-center font-semibold text-2xl mb-4">
+              60 Seconds
+            </div>
+            <p className="text-center text-lg text-[#808080] w-80">
+              To set up Clinicmemo and start documenting.
+            </p>
+          </div>
+        </div>
       </section>
-
-      <div className="flex flex-col lg:flex-row items-center justify-center gap-6 bg-[#FAF9F6]">
-        {/* First column */}
-        <div className="flex flex-col items-center">
-          <div className="text-center font-semibold text-2xl mb-4">
-            120 Minutes
-          </div>
-          <p className="text-center text-lg text-[#808080] w-80">
-            Clinicmemo saves doctors time on clinical documentation.
-          </p>
-        </div>
-
-        {/* Vertical line */}
-        <div className="hidden lg:block h-20 border-l border-[#808080]"></div>
-
-        {/* Second column */}
-        <div className="flex flex-col items-center">
-          <div className="text-center font-semibold text-2xl mb-4">95%</div>
-          <p className="text-center text-lg text-[#808080] w-80">
-            Clinicmemo significantly reduces fatigue for many clinicians using
-            us.
-          </p>
-        </div>
-
-        {/* Vertical line */}
-        <div className="hidden lg:block h-20 border-l border-[#808080]"></div>
-
-        {/* Third column */}
-        <div className="flex flex-col items-center">
-          <div className="text-center font-semibold text-2xl mb-4">
-            60 Seconds
-          </div>
-          <p className="text-center text-lg text-[#808080] w-80">
-            To set up Clinicmemo and start documenting.
-          </p>
-        </div>
-      </div>
 
       {/* How it works */}
       <section>
@@ -268,10 +281,36 @@ function Index() {
             </div>
           </div>
           {/* Testimonies */}
-          <div className="flex gap-4 px-10 justify-center">
-            <Image src={ellipse} alt="bg" className="z-10 absolute" />
+          <div className=" gap-4 px-10 items-center flex flex-col justify-center">
+            <Image
+              src={ellipse}
+              alt="bg"
+              className="z-10 absolute hidden md:block"
+            />
             {/* First section */}
-            <div className="flex-col flex">
+            <div className="flex flex-col gap-4 md:flex-row md:gap-9 mb-4">
+              <Card className=" w-80 mb-2">
+                <CardHeader className="flex gap-3">
+                  <div className="p-2">
+                    <div className="flex items-center mb-6">
+                      <div className=" justify-center items-center flex  mr-2 rounded-full">
+                        <Avatar />
+                      </div>
+                      <div className="text-start ">
+                        <p className="mb-1 font-medium">Shedrach Jonah</p>
+                        <p className="font-light text-sm">CEO</p>
+                      </div>
+                    </div>
+                    <p>
+                      As a healthcare solutions provider, we constantly seek
+                      tools that enhance our services. This platform has become
+                      an indispensable asset, offering a powerful blend of AI
+                      technology and user-friendly design. It&apos;s a win-win
+                      for both our clients and us.
+                    </p>
+                  </div>
+                </CardHeader>
+              </Card>
               <Card className=" w-80 mb-2">
                 <CardHeader className="flex gap-3">
                   <div className="p-2">
@@ -340,7 +379,7 @@ function Index() {
               </Card>
             </div>
             {/* Section Section */}
-            <div className="flex-col flex">
+            <div className="gap-9 hidden md:flex">
               <Card className=" w-80 mb-2">
                 <CardHeader className="flex gap-3">
                   <div className="p-2">
@@ -363,53 +402,6 @@ function Index() {
                   </div>
                 </CardHeader>
               </Card>
-              <Card className=" w-80 mb-2">
-                <CardHeader className="flex gap-3">
-                  <div className="p-2">
-                    <div className="flex items-center mb-6">
-                      <div className=" justify-center items-center flex  mr-2 rounded-full">
-                        <Avatar />
-                      </div>
-                      <div className="text-start ">
-                        <p className="mb-1 font-medium">Shedrach Jonah</p>
-                        <p className="font-light text-sm">CEO</p>
-                      </div>
-                    </div>
-                    <p>
-                      As a healthcare solutions provider, we constantly seek
-                      tools that enhance our services. This platform has become
-                      an indispensable asset, offering a powerful blend of AI
-                      technology and user-friendly design. It&apos;s a win-win
-                      for both our clients and us.
-                    </p>
-                  </div>
-                </CardHeader>
-              </Card>
-              <Card className=" w-80 mb-2">
-                <CardHeader className="flex gap-3">
-                  <div className="p-2">
-                    <div className="flex items-center mb-6">
-                      <div className=" justify-center items-center flex  mr-2 rounded-full">
-                        <Avatar />
-                      </div>
-                      <div className="text-start ">
-                        <p className="mb-1 font-medium">Shedrach Jonah</p>
-                        <p className="font-light text-sm">CEO</p>
-                      </div>
-                    </div>
-                    <p>
-                      As a healthcare solutions provider, we constantly seek
-                      tools that enhance our services. This platform has become
-                      an indispensable asset, offering a powerful blend of AI
-                      technology and user-friendly design. It&apos;s a win-win
-                      for both our clients and us.
-                    </p>
-                  </div>
-                </CardHeader>
-              </Card>
-            </div>
-            {/* Third section */}
-            <div className="flex-col flex">
               <Card className=" w-80 mb-2">
                 <CardHeader className="flex gap-3">
                   <div className="p-2">
@@ -479,13 +471,182 @@ function Index() {
             </div>
           </div>
         </div>
+        <div className="px-4  md:px-10 lg:px-20 py-8 md:py-10 lg:py-32 bg-[#FAF9F6]">
+          <Card className="bg-[#008080] w-full">
+            <CardBody>
+              <div className="flex flex-col md:flex-row justify-between items-center py-8 md:py-12 lg:py-16 px-6 md:px-10 lg:px-20">
+                <div className="text-center md:text-left">
+                  <h1 className="text-white text-3xl md:text-4xl lg:text-5xl font-regular max-w-xl md:max-w-lg lg:max-w-2xl">
+                    Ready to save time on your consultations?
+                  </h1>
+                  <p className="text-gray-300 text-base md:text-lg lg:text-xl mt-4 max-w-xl md:max-w-lg lg:max-w-2xl">
+                    Approximately 2 hours per day has been saved from automated
+                    documentations
+                  </p>
+                </div>
+                <div className="mt-6 md:mt-0">
+                  <Button size="lg" className="bg-white">
+                    <h1 className="font-medium">Try Demo</h1>
+                    <Image src={arrowright} alt="" />
+                  </Button>
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
       </section>
 
       {/* Pricing */}
-      <div></div>
+      <section id="Pricing" className="h-auto md:h-full">
+        <div className=" relative bg-[#FAF9F6]  flex flex-col justify-center items-center py-10 px-4 sm:px-0">
+          <h1 className="text-black mb-10 text-4xl text-center font-semibold">
+            Upgrade your plan
+          </h1>
+          <div className="flex mb-10">
+            <h1
+              className={`mr-4 ${
+                isYearlyBilling ? "text-[#E67E22]" : "text-[#ccc]"
+              }`}
+            >
+              Billed Yearly
+            </h1>
+            <Switch
+              className="mr-4"
+              checked={isYearlyBilling}
+              onChange={toggleBillingCycle}
+            />
+            <h1
+              className={`mr-4 ${
+                isYearlyBilling ? "text-[#ccc]" : "text-[#E67E22]"
+              }`}
+            >
+              Billed Monthly
+            </h1>
+          </div>
+
+          <div className="flex flex-col md:flex-row gap-4 md:gap-10">
+            <motion.div
+              layout
+              variants={{
+                hidden: { y: 30, opacity: 0 },
+                visible: { y: 0, opacity: 1 },
+              }}
+              initial="hidden"
+              whileInView="visible"
+              transition={{ ease: "linear", delay: 0.3 }}
+              viewport={{ once: false }}
+            >
+              <Card className="w-full md:w-[350px] px-4 py-6 bg-transparent border border-[#008080] mb-4">
+                <h3 className="mb-4 font-semibold text-2xl">Free</h3>
+                <h1 className="text-black text-4xl mb-2 font-regular">$0</h1>
+                <p className="mb-4 text-sm text-gray-400">Per month</p>
+
+                <p className="text-sm mb-4 text-gray-400">
+                  Perfect for individuals or Companies looking to try things
+                  out.
+                </p>
+
+                <Button
+                  size="lg"
+                  variant="bordered"
+                  className="border-[#008080] mb-6"
+                >
+                  Get Started
+                </Button>
+
+                <Divider className="mb-4" />
+
+                <h3 className="font-semibold mb-4">Features:</h3>
+
+                <div className="flex mb-4">
+                  <Image src={checkx} alt="x" className="mr-4" />
+                  <p className="text-black">5 sessions</p>
+                </div>
+                <div className="flex mb-4">
+                  <Image src={checkx} alt="x" className="mr-4" />
+                  <p className="text-black">1 account</p>
+                </div>
+                <div className="flex mb-4">
+                  <Image src={checkx} alt="x" className="mr-4" />
+                  <p className="text-black">Custom templates</p>
+                </div>
+                <div className="flex mb-4">
+                  <Image src={check} alt="x" className="mr-4" />
+                  <p className="text-black">Email support</p>
+                </div>
+              </Card>
+            </motion.div>
+            <motion.div
+              variants={{
+                hidden: { y: 30, opacity: 0 },
+                visible: { y: 0, opacity: 1 },
+              }}
+              initial="hidden"
+              whileInView="visible"
+              transition={{ ease: "linear", delay: 0.3 }}
+              viewport={{ once: false }}
+            >
+              <Card className="w-full md:w-[350px] bg-transparent px-4 py-6 border border-[#008080] mb-4">
+                <h3 className="mb-4 font-semibold text-2xl">Basic</h3>
+                <h1 className="text-black text-4xl mb-2 font-regular">
+                  {isYearlyBilling ? "$119.99" : "$9.99"}
+                </h1>
+                <p className="mb-4 text-sm text-gray-400">
+                  {" "}
+                  {isYearlyBilling ? "Per year" : "Per month"}
+                </p>
+
+                <p className="text-sm mb-4 text-gray-400">
+                  Perfect for individuals or Companies looking to try things
+                  out.
+                </p>
+
+                <Button
+                  variant="bordered"
+                  size="lg"
+                  className="border-[#008080] mb-6"
+                >
+                  Get Started
+                </Button>
+
+                <Divider className="mb-4" />
+
+                <h3 className="font-semibold mb-4">Features:</h3>
+
+                <div className="flex mb-4">
+                  <Image src={check} alt="x" className="mr-4" />
+                  <p className="text-black">
+                    {isYearlyBilling ? "2500 Summaries" : "200 Summaries"}
+                  </p>
+                </div>
+                <div className="flex mb-4">
+                  <Image src={check} alt="x" className="mr-4" />
+                  <p className="text-black">
+                    {isYearlyBilling
+                      ? "Maximum of 20GB yearly"
+                      : "Maximum of 1,600MB per month"}
+                  </p>
+                </div>
+                <div className="flex mb-4">
+                  <Image src={check} alt="x" className="mr-4" />
+                  <p className="text-black">
+                    {isYearlyBilling
+                      ? "Maximum of 120,000 pages"
+                      : "Maximum of 10,000 pages"}
+                  </p>
+                </div>
+                <div className="flex mb-4">
+                  <Image src={check} alt="x" className="mr-4" />
+                  <p className="text-black">Try 3 days free</p>
+                </div>
+              </Card>
+            </motion.div>
+          </div>
+        </div>
+      </section>
 
       {/* Footer */}
-      <div></div>
+      <Footer />
     </div>
   );
 }
