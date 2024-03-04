@@ -170,8 +170,8 @@ function Index() {
 
       {/* Main Content */}
       <div
-        className={`transition-all duration-300 ease-in-out h-screen flex-1 ${
-          isSidebarOpen ? "ml-96 opacity-80" : ""
+        className={`h-screen flex-1 ${
+          isSidebarOpen ? "lg:ml-96" : ""
         } bg-[#FBFBFB]`}
       >
         {/* Header */}
@@ -213,12 +213,14 @@ function Index() {
             </div>
           </div>
 
+          {/* toggle leftside bar */}
+
           {activeTab === "note" && showNoteCards && (
             <div className="gap-4 flex items-center">
-              <Button className="px-6 border" variant="light">
+              <Button className="px-6 border hidden md:block" variant="light">
                 <h1 className=" ">Regenerate</h1>
               </Button>
-              <Button className=" px-6 bg-[#008080]">
+              <Button className=" px-6 hidden md:flex bg-[#008080]">
                 <Image src={copy2} alt="copy" />
                 <h1 className="text-white font-semibold">Copy Note</h1>
               </Button>
@@ -228,7 +230,7 @@ function Index() {
                 type="button"
                 className="ml-4"
               >
-                <Image src={menu2} alt="" />
+                <Image src={menu2} alt="" className="md:w-10 w-10" />
               </button>
             </div>
           )}

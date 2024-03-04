@@ -31,7 +31,7 @@ const LeftSideBar: React.FC<SliderProps> = ({
 
   return (
     <div
-      className={`sidebar bg-white h-full p-4 sm:w-[400px] fixed top-0 right-0 opacity-95 z-10 transition-transform duration-300 ease-in-out transform ${
+      className={`sidebar bg-white h-full p-4 sm:w-[400px] fixed top-0 right-0 z-20 transition-transform duration-300 ease-in-out transform ${
         isLeftSidebarOpen ? "translate-x-0 " : "translate-x-full"
       } flex flex-col `}
       style={{ maxHeight: "100vh", overflowY: "auto" }}
