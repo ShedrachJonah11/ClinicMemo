@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ModalContent,
@@ -14,6 +14,9 @@ import Image from "next/image";
 import { motion, useScroll } from "framer-motion";
 import check from "../public/check .svg";
 import checkx from "../public/checkX.svg";
+import { getJSONdata, getPlan } from "@/application/utils/functions";
+import { startUserSubcription } from "@/application/api/apis";
+import Loader from "./Loader";
 
 interface PaymentPlanModalProps {
   isOpen: boolean;
@@ -25,10 +28,31 @@ const PaymentPlanModal: React.FC<PaymentPlanModalProps> = ({
   onClose,
 }) => {
   const [isYearlyBilling, setIsYearlyBilling] = useState(true);
+  const [userData,setUserData]=useState<any>();
+  const [isLoading,setLoader]=useState(false);
 
   const toggleBillingCycle = () => {
     setIsYearlyBilling((prev) => !prev);
   };
+  useEffect(()=>{
+    if(window){
+      setUserData(getJSONdata("profile"));
+     }
+  },[])
+
+  const subscribeUser= async ()=>{
+    if(getPlan(userData?.roles || [])!=="Pro"){
+      try{
+        setLoader(true);
+      const sub = await startUserSubcription("PLUS","YEARLY");
+      setLoader(false);
+      window.location.href=sub.url;
+      console.log(sub);
+      }catch(e){
+        console.log(e);
+      }
+    }
+  }
   return (
     <Modal backdrop="opaque" isOpen={isOpen} onOpenChange={onClose}>
       <ModalContent style={{ maxWidth: "800px" }}>
@@ -86,7 +110,7 @@ const PaymentPlanModal: React.FC<PaymentPlanModalProps> = ({
                       variant="bordered"
                       className="border-[#008080] mb-6"
                     >
-                      Get Started
+                      {getPlan(userData?.roles || [])==="Free"?"Active":"Get Started"}
                     </Button>
 
                     <Divider className="mb-4" />
@@ -136,8 +160,11 @@ const PaymentPlanModal: React.FC<PaymentPlanModalProps> = ({
                     <Button
                       variant="bordered"
                       className="border-[#008080] mb-6"
+                      onClick={()=>{
+                        subscribeUser();
+                      }}
                     >
-                      Get Started
+                      {getPlan(userData?.roles || [])==="Pro"?"Active":"Get Started"}
                     </Button>
 
                     <Divider className="mb-4" />
@@ -174,6 +201,7 @@ const PaymentPlanModal: React.FC<PaymentPlanModalProps> = ({
           </section>
         </ModalBody>
       </ModalContent>
+      {isLoading && <Loader type={'FULL'}/>}
     </Modal>
   );
 };

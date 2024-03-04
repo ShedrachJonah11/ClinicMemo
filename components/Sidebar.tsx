@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "../public/vetmemo.svg";
 import arrowback from "../public/indent-decrease.svg";
@@ -22,6 +22,7 @@ import settings from "../public/settings.svg";
 import help from "../public/help.svg";
 import tag from "../public/tag-user.svg";
 import sign from "../public/sign out.svg";
+import { getJSONdata, getPlan } from "@/application/utils/functions";
 
 interface SliderProps {
   isSidebarOpen: boolean;
@@ -47,6 +48,7 @@ const Sidebar: React.FC<SliderProps> = ({
     onClose: onPaymentModalClose,
   } = useDisclosure();
   const [isHovered, setIsHovered] = useState(false);
+  const [userData,setUserData]=useState<any>()
 
   const handleResetState = () => {
     resetState(); // Call resetState function
@@ -56,6 +58,11 @@ const Sidebar: React.FC<SliderProps> = ({
     // Call the handleHistoryCardClick function passed from the parent component
     handleHistoryCardClick();
   };
+  useEffect(()=>{
+    if(window){
+      setUserData(getJSONdata("profile"));
+     }
+  },[])
 
   return (
     <div
@@ -142,7 +149,7 @@ const Sidebar: React.FC<SliderProps> = ({
                   />
                   <p className="mb-1 font-medium mr-2">John Deo</p>
                   <div className=" border px-2 border-blue-400 b-t-2 rounded-lg bg-blue-200 ">
-                    <p className="text-[#0058FA]">Pro</p>
+                    <p className="text-[#0058FA]">{getPlan(userData?.roles || [])}</p>
                   </div>
                 </div>
               </div>
@@ -172,10 +179,10 @@ const Sidebar: React.FC<SliderProps> = ({
                         John Deo
                       </h3>
                       <div className=" border px-2 border-blue-400 b-t-2 rounded-lg bg-blue-200 ">
-                        <p className="text-[#0058FA]">Pro</p>
+                        <p className="text-[#0058FA]">{getPlan(userData?.roles || [])}</p>
                       </div>
                     </div>
-                    <p className="text-tiny">Shedrachjonah11@gmail.com</p>
+                    <p className="text-tiny">{userData?.email}</p>
                   </div>
                   {/* <button> */}
                   <svg

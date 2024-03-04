@@ -34,6 +34,8 @@ import file from "../../public/document-forward.svg";
 import Sidebar from "@/components/Sidebar";
 import SaveModal from "@/components/SaveModal";
 import LeftSideBar from "@/components/LeftSideBar";
+import AuthProvider from "@/application/utils/authProvider";
+import { getJSONdata } from "@/application/utils/functions";
 
 // Extend the Window interface to include SpeechRecognition
 interface Window {
@@ -67,6 +69,7 @@ function Index() {
   const [isRecording, setIsRecording] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [showNoteCards, setShowNoteCards] = useState(false);
+  const [userData,setUserData]=useState<any>()
 
   const [recordingDuration, setRecordingDuration] = useState(0);
 
@@ -133,7 +136,9 @@ function Index() {
 
     // Call handleResize when the component mounts
     handleResize();
-
+   if(window){
+    setUserData(getJSONdata("profile"));
+   }
     // Remove event listener when component unmounts
     return () => window.removeEventListener("resize", handleResize);
   }, []);
@@ -152,7 +157,8 @@ function Index() {
   };
 
   return (
-    <div className="relative flex">
+    <AuthProvider>
+      <div className="relative flex">
       {/* Sidebar */}
       <Sidebar
         isSidebarOpen={isSidebarOpen}
@@ -542,6 +548,7 @@ function Index() {
         </div>
       </div>
     </div>
+    </AuthProvider>
   );
 }
 

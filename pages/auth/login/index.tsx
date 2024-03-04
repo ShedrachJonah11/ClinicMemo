@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import bg from "../../../public/bgauth.png";
 import star from "../../../public/star.svg";
 import Image from "next/image";
@@ -7,10 +7,67 @@ import { Button, Card, CardBody, Checkbox, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { EyeFilledIcon } from "../../../public/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../../../public/EyeSlashFilledIcon";
+import { loginAccount, loginGoogle } from "@/application/api/apis";
+import Loader from "@/components/Loader";
+import { useRouter } from 'next/router';
 
 function Index() {
+  const router = useRouter();
   const [isVisible, setIsVisible] = React.useState(false);
-
+  const [userData,setUserData] = useState<any>({
+    username:"",
+    password:""
+  });
+  const [isLoading,setLoading]=useState(false);
+  const loginG = async ()=>{
+    try{
+    setLoading(true);
+    const res = await loginGoogle();
+    setLoading(false);
+    if(window){
+      window.location.href=res.authorization_url;
+    }
+    }catch(e){
+      setLoading(false);
+      console.log(e);
+    }
+  }
+  const login= async ()=>{
+    console.log(userData);
+    if(userData){
+      if(userData.username==""){
+        //email toast
+        return;
+      }
+      if(userData.password==""){
+        ///pasword toast
+        return;
+      }
+      try{
+      
+      setLoading(true);
+      const res = await loginAccount(userData);
+      setLoading(false);
+      console.log(res);
+      //signed up successfully
+      router.push('/dashboard');
+      }catch(error:any){
+        setLoading(false);
+        console.log(error)
+        if (error.response && error.response.data) {
+          const { data } = error.response;
+          
+          if (data.detail === "LOGIN_BAD_CREDENTIALS") {
+            // Handle invalid password error
+          } else {
+            // Handle other error scenarios
+          }
+        } else {
+          // Handle other types of errors
+        }
+      }
+    }
+  }
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
@@ -25,7 +82,12 @@ function Index() {
             Welcome back! Please enter your details.
           </p>
 
-          <Input type="email" label="Email" placeholder="Enter your email" />
+          <Input type="email" label="Email" placeholder="Enter your email"
+           onChange={(e)=>{
+            userData.username=e.target.value;
+            setUserData(userData)
+          }}
+          />
           <Input
             label="Password"
             placeholder="Enter your password"
@@ -40,9 +102,15 @@ function Index() {
             }
             type={isVisible ? "text" : "password"}
             className="mt-4"
+            onChange={(e)=>{
+              userData.password=e.target.value;
+              setUserData(userData)
+            }}
           />
 
-          <Button size="lg" className="w-full mt-6 bg-[#008080]">
+          <Button size="lg" className="w-full mt-6 bg-[#008080]" onClick={()=>{
+            login();
+          }}>
             <p className="text-white text-semibold ">Login</p>
           </Button>
 
@@ -65,8 +133,10 @@ function Index() {
           </div>
 
           <Card className="w-full mb-4 ">
-            <CardBody className="justify-center items-center">
-              <p>Sign up with Google</p>
+            <CardBody className="justify-center items-center"  onClick={()=>{
+            loginG();
+          }}>
+              <p>Login with Google</p>
             </CardBody>
           </Card>
           <div className="flex justify-center items-center">
@@ -79,6 +149,7 @@ function Index() {
           </div>
         </CardBody>
       </Card>
+      {isLoading && <Loader type={'FULL'}/>}
     </div>
   );
 }
