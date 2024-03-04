@@ -12,6 +12,7 @@ import Loader from "@/components/Loader";
 import { useRouter } from "next/router";
 import goggle from "../../../public/goggle.svg";
 import arrowback from "../../../public/menu2.svg";
+import { toast } from "react-toastify";
 
 function Index() {
   const router = useRouter();
@@ -38,11 +39,11 @@ function Index() {
     console.log(userData);
     if (userData) {
       if (userData.username == "") {
-        //email toast
+        toast.error("Please enter your username.");
         return;
       }
       if (userData.password == "") {
-        ///pasword toast
+        toast.error("Please enter your password.");
         return;
       }
       try {
