@@ -21,7 +21,7 @@ function Index() {
           </p>
 
           <Button size="lg" className="w-full mt-2 bg-[#008080]">
-            <Link href="/auth/verify">
+            <Link href={"/auth/create"}>
               <p className="text-white text-semibold ">Try VetMemo</p>
             </Link>
           </Button>
