@@ -94,7 +94,12 @@ const LeftSideBar: React.FC<SliderProps> = ({
               value={dropdownValue}
               onChange={handleDropdownChange}
             >
-              <option value="Soup">Soup</option>
+              <option value="SOAP">SOAP</option>
+              <option value="General Medicine">General Medicine</option>
+              <option value="Cardilogy">Cardilogy</option>
+              <option value="Psychiatry">Psychiatry</option>
+              <option value="Psychology">Psychology</option>
+              <option value="Diet">Diet</option>
             </select>
 
             <p className="text-xs mb-2 font-medium text-[#008080]">STYLE</p>
@@ -103,7 +108,9 @@ const LeftSideBar: React.FC<SliderProps> = ({
               name=""
               id=""
             >
+              <option value="Auto">Auto</option>
               <option value="Bullet Point">Bullet Point</option>
+              <option value="Paragraph">Paragraph</option>
             </select>
           </CardBody>
         </Card>
