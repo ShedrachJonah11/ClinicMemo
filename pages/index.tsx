@@ -92,7 +92,7 @@ function Index() {
               120 Minutes
             </div>
             <p className="text-center text-lg text-[#808080] w-80">
-              Clinicmemo saves doctors time on clinical documentation.
+              VetMemos saves doctors time on clinical documentation.
             </p>
           </div>
 
@@ -103,7 +103,7 @@ function Index() {
           <div className="flex flex-col items-center">
             <div className="text-center font-semibold text-2xl mb-4">95%</div>
             <p className="text-center text-lg text-[#808080] w-80">
-              Clinicmemo significantly reduces fatigue for many clinicians using
+              VetMemos significantly reduces fatigue for many clinicians using
               us.
             </p>
           </div>
@@ -117,7 +117,7 @@ function Index() {
               60 Seconds
             </div>
             <p className="text-center text-lg text-[#808080] w-80">
-              To set up Clinicmemo and start documenting.
+              To set up VetMemos and start documenting.
             </p>
           </div>
         </div>
