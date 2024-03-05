@@ -39,23 +39,25 @@ function Footer() {
                 Book a call with our Program Director
               </p>
             </div>
-            <Button size="md" className="bg-white w-52 font-semibold">
-              <Link href="/contact">Contact Us</Link>
-            </Button>
+            <Link href="/contact">
+              <Button size="md" className="bg-white w-52 font-semibold">
+                Contact Us
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
-      <div className="flex  justify-between py-4 sm:px-10 px-3 border-t border-white text-[#E1E1E199]">
-        <div>
+      <div className="flex flex-col sm:flex-row justify-between py-4 sm:px-10 px-3 border-t border-white text-gray-300">
+        <div className="mb-4 sm:mb-0">
           <p className="font-light">
             {" "}
             <span className="text-xl">&copy;</span> {date.getUTCFullYear()}{" "}
             Augment All Rights Reserved.
           </p>
         </div>
-        <div className="flex gap-10">
-          <p className="font-light">Terms of Use</p>
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-10">
           <p className="font-light">Privacy Policy</p>
+          <p className="font-light">Terms of Use</p>
         </div>
       </div>
     </div>

@@ -65,7 +65,7 @@ export default function Nav() {
             </Link>
           </NavbarItem>
           <NavbarItem>
-            <Link href={""}>
+            <Link href={"/about"}>
               <h1 className="text-black mr-6">About us</h1>
             </Link>
           </NavbarItem>
