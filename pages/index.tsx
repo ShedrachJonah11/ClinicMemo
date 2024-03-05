@@ -70,11 +70,11 @@ function Index() {
             </p>
 
             <div className="flex items-center gap-4 mt-20">
-              <Button className="bg-[#008080] px-8 py-6">
-                <Link href={"/auth/welcome"}>
+              <Link href={"/auth/welcome"}>
+                <Button className="bg-[#008080] px-8 py-6">
                   <h1 className="text-white font-semibold">Get Started</h1>
-                </Link>
-              </Button>
+                </Button>
+              </Link>
               <button className="font-semibold text-lg">Try Demo</button>
               <Image src={arrowright} alt="" />
             </div>

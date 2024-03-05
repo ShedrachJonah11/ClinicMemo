@@ -138,7 +138,7 @@ function Index() {
             </div>
             <div>
               <Link
-                href={"/auth/newpassword"}
+                href={"/auth/forgotpassword"}
                 className="text-[#008080] text-xs md:text-sm"
               >
                 Forgot password

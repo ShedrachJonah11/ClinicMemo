@@ -18,7 +18,6 @@ export default function Nav() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-
   useEffect(() => {
     // Function to check if window exists (client-side) and update isMobile state
     const handleResize = () => {
@@ -42,7 +41,6 @@ export default function Nav() {
   };
 
   const pathname = usePathname() || "/";
-
 
   return (
     <Navbar maxWidth="xl" className="shadow p-0 md:px-6 top-[0] bg-[#FAF9F6] ">
@@ -71,12 +69,10 @@ export default function Nav() {
           </NavbarItem>
           <NavbarItem>
             <Link
-             href="/#Pricing"
-             className={`${pathname.includes("/#Pricing")} text-black`}
+              href="/#Pricing"
+              className={`${pathname.includes("/#Pricing")} text-black`}
             >
-              <h1 className="text-black">
-                Pricing
-              </h1>
+              <h1 className="text-black">Pricing</h1>
             </Link>
           </NavbarItem>
 
@@ -87,11 +83,11 @@ export default function Nav() {
                 Login
               </Link>
             </NavbarItem>
-            <Button size="md" className="bg-[#008080] px-6">
-              <Link href={"/auth/welcome"}>
+            <Link href={"/auth/welcome"}>
+              <Button size="md" className="bg-[#008080] px-10">
                 <h1 className="text-white font-semibold">Get Started</h1>
-              </Link>
-            </Button>
+              </Button>
+            </Link>
           </div>
         </NavbarContent>
       )}
@@ -99,7 +95,7 @@ export default function Nav() {
       {/* Conditionally render the NavbarMenu when the hamburger menu is active */}
       {isMenuOpen && (
         <NavbarMenu>
-         <NavbarItem>
+          <NavbarItem>
             <Link href={"/"}>
               <h1 className="text-black mr-6">Home</h1>
             </Link>
@@ -111,24 +107,22 @@ export default function Nav() {
           </NavbarItem>
           <NavbarItem>
             <Link
-             href="/#Pricing"
-             className={`${pathname.includes("/#Pricing")} text-black`}
+              href="/#Pricing"
+              className={`${pathname.includes("/#Pricing")} text-black`}
             >
-              <h1 className="text-black">
-                Pricing
-              </h1>
+              <h1 className="text-black">Pricing</h1>
             </Link>
           </NavbarItem>
           <NavbarItem className="mr-4">
-              <Link href={"/auth/login"} className="text-black font-semibold">
-                Login
-              </Link>
-            </NavbarItem>
-            <Button size="md" className="bg-[#008080] px-6">
-              <Link href={"/auth/create"}>
-                <h1 className="text-white font-semibold">Get Started</h1>
-              </Link>
-            </Button>
+            <Link href={"/auth/login"} className="text-black font-semibold">
+              Login
+            </Link>
+          </NavbarItem>
+          <Button size="md" className="bg-[#008080] px-6">
+            <Link href={"/auth/create"}>
+              <h1 className="text-white font-semibold">Get Started</h1>
+            </Link>
+          </Button>
         </NavbarMenu>
       )}
     </Navbar>
