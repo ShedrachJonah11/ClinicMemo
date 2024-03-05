@@ -335,7 +335,7 @@ let cn=0;
         ) }
         {activeTab === "transcript" &&  allData.transcript!=null  && allData.transcript!="" && (
             <div>
-               {processTranscript(allData.transcript)} 
+               {processTranscript(allData.transcript) /* transcript here  */} 
                <Button className="button" onClick={ ()=>{
               
                 generateMainNote()
