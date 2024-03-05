@@ -35,10 +35,10 @@ function index() {
               <CardBody className="md:p-10 p-6 ">
                 <Image src={side} alt="" className="absolute right-0 top-0" />
                 <h1 className="md:text-4xl text-lg mb-2 ">
-                  We'd love to hear from you!
+                  We&apos;d love to hear from you!
                 </h1>
                 <p className="text-gray-400 text-lg mb-4 ">
-                  Let's get in touch
+                  Let&apos;s get in touch
                 </p>
 
                 <div>
