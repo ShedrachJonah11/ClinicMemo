@@ -9,26 +9,60 @@ import magicpen from "../public/magicpen.svg";
 interface SliderProps {
   isLeftSidebarOpen: boolean;
   toggleLeftSidebar: () => void;
+  propSettings:any;
+  setSettings:any;
+  patientNote:any;
+  setPatientNote:any;
+  generate:any;
 }
 
 const LeftSideBar: React.FC<SliderProps> = ({
   isLeftSidebarOpen,
   toggleLeftSidebar,
+  propSettings,
+  setSettings,
+  patientNote,
+  setPatientNote,
+  generate
 }) => {
   const sizes = ["sm"];
   const [activeTab, setActiveTab] = useState("he");
   const [dropdownValue, setDropdownValue] = useState("Soup");
+  const [dropdownValueStyle, setDropdownValueStyle] = useState("Bullet Point");
+  const [instruction,setInstruction]=useState("");
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
+    setSettings({
+      ...propSettings,
+      pronoun: tab,
+    });
   };
 
   const handleDropdownChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setDropdownValue(event.target.value);
+    setSettings({
+      ...propSettings,
+      template: event.target.value,
+    });
   };
-
+  const handleDropdownChangeStyle = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setDropdownValueStyle(event.target.value);
+    setSettings({
+      ...propSettings,
+      style: event.target.value,
+    });
+  };
+ const generateNote = async ()=>{
+  //show button loader
+  await generate();
+  toggleLeftSidebar()
+  //hide button loader
+ }
   return (
     <div
       className={`sidebar bg-white h-full p-4 sm:w-[400px] fixed top-0 right-0 opacity-95 z-10 transition-transform duration-300 ease-in-out transform ${
@@ -102,6 +136,8 @@ const LeftSideBar: React.FC<SliderProps> = ({
               className="w-full p-4 bg-white rounded-xl mb-4"
               name=""
               id=""
+              value={dropdownValueStyle}
+              onChange={handleDropdownChangeStyle}
             >
               <option value="Bullet Point">Bullet Point</option>
             </select>
@@ -128,8 +164,19 @@ const LeftSideBar: React.FC<SliderProps> = ({
             <Textarea
               placeholder="Use an example above or enter your own instructions"
               className="mb-2"
+              value={instruction}
+              onChange={(e)=>{
+                setInstruction(e.target.value)
+                setSettings({
+                  ...propSettings,
+                  customInstruction: e.target.value,
+                });
+              }}
             />
-            <Button className="bg-[#008080]">
+            <Button className="bg-[#008080]" onClick={()=>{
+              //show button loader
+             generateNote()
+            }}>
               <p className="text-white">Generate</p>
             </Button>
           </CardBody>
@@ -142,7 +189,12 @@ const LeftSideBar: React.FC<SliderProps> = ({
               <Image src={note} alt="note" className="mr-2" />
               <h1 className="text-xl font-medium">Patient instructions</h1>
             </div>
-            <Textarea placeholder="Based on your conversation, i have jotted down some things to take into consideration" />
+            <Textarea placeholder="Based on your conversation, i have jotted down some things to take into consideration"
+            value={patientNote}
+            onChange={(e)=>{
+              setPatientNote(e.target.value);
+            }}
+            />
             <Button className="mt-4 px-6 bg-[#008080]">
               <Image src={copy2} alt="copy" />
               <h1 className="text-white font-semibold">Copy Note</h1>

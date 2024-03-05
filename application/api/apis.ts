@@ -9,6 +9,16 @@ const data = req.data;
 storeJSONdata("profile", data);
 return data;
 }
+export const getTranscript = async (id:string)=>{
+let req= await AxiosInstance.get(`/transcription/status/${id}`);
+const data = req.data;
+return data;
+}
+export const generateNote = async (postdata:any)=>{
+let req= await AxiosInstance.post(`/notes/regenerate`,postdata);
+const data = req.data;
+return data;
+}
 export const getUserHistory = async ()=>{
 let req= await AxiosInstance.get("/summary?order=desc&page=1&page_size=20",{
     baseURL:APP_URL
