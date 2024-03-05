@@ -101,7 +101,7 @@ function Index() {
             placeholder="Enter your first name"
             className="mb-4"
             variant="bordered"
-            onChange={(e) => {
+            onChange={(e:any) => {
               userData.first_name = e.target.value;
               setUserData(userData);
             }}
@@ -112,7 +112,7 @@ function Index() {
             placeholder="Enter your last name"
             variant="bordered"
             className="mb-4"
-            onChange={(e) => {
+            onChange={(e:any) => {
               userData.last_name = e.target.value;
               setUserData(userData);
             }}
@@ -122,7 +122,7 @@ function Index() {
             label="Email"
             placeholder="Enter your email"
             variant="bordered"
-            onChange={(e) => {
+            onChange={(e:any) => {
               userData.email = e.target.value;
               setUserData(userData);
             }}
@@ -146,7 +146,7 @@ function Index() {
             }
             type={isVisible ? "text" : "password"}
             className="mt-4"
-            onChange={(e) => {
+            onChange={(e:any) => {
               userData.password = e.target.value;
               setUserData(userData);
             }}

@@ -95,7 +95,7 @@ function Index() {
             type="email"
             label="Email"
             placeholder="Enter your email"
-            onChange={(e) => {
+            onChange={(e:any) => {
               userData.username = e.target.value;
               setUserData(userData);
             }}
@@ -115,7 +115,7 @@ function Index() {
             }
             type={isVisible ? "text" : "password"}
             className="mt-4"
-            onChange={(e) => {
+            onChange={(e:any) => {
               userData.password = e.target.value;
               setUserData(userData);
             }}
