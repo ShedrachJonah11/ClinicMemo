@@ -65,7 +65,7 @@ const LeftSideBar: React.FC<SliderProps> = ({
  }
   return (
     <div
-      className={`sidebar bg-white h-full p-4 sm:w-[400px] fixed top-0 right-0 opacity-95 z-10 transition-transform duration-300 ease-in-out transform ${
+      className={`sidebar bg-white h-full p-4 sm:w-[400px] fixed top-0 right-0 z-20 transition-transform duration-300 ease-in-out transform ${
         isLeftSidebarOpen ? "translate-x-0 " : "translate-x-full"
       } flex flex-col `}
       style={{ maxHeight: "100vh", overflowY: "auto" }}
@@ -128,7 +128,12 @@ const LeftSideBar: React.FC<SliderProps> = ({
               value={dropdownValue}
               onChange={handleDropdownChange}
             >
-              <option value="Soup">Soup</option>
+              <option value="SOAP">SOAP</option>
+              <option value="General Medicine">General Medicine</option>
+              <option value="Cardilogy">Cardilogy</option>
+              <option value="Psychiatry">Psychiatry</option>
+              <option value="Psychology">Psychology</option>
+              <option value="Diet">Diet</option>
             </select>
 
             <p className="text-xs mb-2 font-medium text-[#008080]">STYLE</p>
@@ -139,7 +144,9 @@ const LeftSideBar: React.FC<SliderProps> = ({
               value={dropdownValueStyle}
               onChange={handleDropdownChangeStyle}
             >
+              <option value="Auto">Auto</option>
               <option value="Bullet Point">Bullet Point</option>
+              <option value="Paragraph">Paragraph</option>
             </select>
           </CardBody>
         </Card>
