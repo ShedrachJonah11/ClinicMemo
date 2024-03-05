@@ -11,7 +11,7 @@ import friend from "../../public/hand.svg";
 import sheild from "../../public/sheild2.svg";
 import person from "../../public/person.svg";
 import Link from "next/link";
-import arrowright from "../../public/arrowright.svg";
+import arrowright from "../../public/arrow-right.svg";
 
 function Index() {
   return (
