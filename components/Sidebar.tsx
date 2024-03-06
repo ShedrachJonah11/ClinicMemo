@@ -29,8 +29,8 @@ interface SliderProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
   resetState: () => void;
-  handleHistoryCardClick: (id:any) => void;
-  activeId:any
+  handleHistoryCardClick: (id: any) => void;
+  activeId: any;
 }
 
 const Sidebar: React.FC<SliderProps> = ({
@@ -38,7 +38,7 @@ const Sidebar: React.FC<SliderProps> = ({
   toggleSidebar,
   resetState,
   handleHistoryCardClick,
-  activeId
+  activeId,
 }) => {
   const {
     isOpen: isDeleteModalOpen,
@@ -50,27 +50,27 @@ const Sidebar: React.FC<SliderProps> = ({
     onOpen: onPaymentModalOpen,
     onClose: onPaymentModalClose,
   } = useDisclosure();
-  const [isHovered, setIsHovered] = useState(false);
-  const [userData,setUserData]=useState<any>()
-  const [documents,setDocuments]=useState<any>([])
+  const [hoveredStates, setHoveredStates] = useState<boolean[]>([]);
+  const [userData, setUserData] = useState<any>();
+  const [documents, setDocuments] = useState<any>([]);
 
   const handleResetState = () => {
-    resetState(); 
-    loadDocuments()
-    // Call resetState function
+    resetState();
+    loadDocuments();
   };
 
-  const handleHistoryClick = (id:any) => {
-    // Call the handleHistoryCardClick function passed from the parent component
+  const handleHistoryClick = (id: any) => {
     handleHistoryCardClick(id);
   };
-  useEffect(()=>{
-    if(window){
+
+  useEffect(() => {
+    if (window) {
       setUserData(getJSONdata("profile"));
-     }
-  },[])
-  const groupedDocuments:any = {};
-  documents.forEach((doc:any) => {
+    }
+  }, []);
+
+  const groupedDocuments: any = {};
+  documents.forEach((doc: any) => {
     const date = new Date(doc.date).toDateString();
     if (!groupedDocuments[date]) {
       groupedDocuments[date] = [];
@@ -78,22 +78,40 @@ const Sidebar: React.FC<SliderProps> = ({
     groupedDocuments[date].push(doc);
   });
 
-  const loadDocuments= async ()=>{
-    try{
-      //const data=[];
-    const alldoc = await getAllEncouterDB();
-    console.log(alldoc)
-    setDocuments(alldoc);
-   
-   
-    }catch(e){
+  const loadDocuments = async () => {
+    try {
+      const alldoc = await getAllEncouterDB();
+      console.log(alldoc);
+      setDocuments(alldoc);
+    } catch (e) {
       setDocuments([]);
     }
-  }
-  
-useEffect(()=>{
-  loadDocuments();
-},[])
+  };
+
+  useEffect(() => {
+    loadDocuments();
+  }, []);
+
+  useEffect(() => {
+    setHoveredStates(new Array(documents.length).fill(false));
+  }, [documents]);
+
+  const handleMouseEnter = (index: number) => {
+    setHoveredStates((prevStates) => {
+      const newStates = [...prevStates];
+      newStates[index] = true;
+      return newStates;
+    });
+  };
+
+  const handleMouseLeave = (index: number) => {
+    setHoveredStates((prevStates) => {
+      const newStates = [...prevStates];
+      newStates[index] = false;
+      return newStates;
+    });
+  };
+
   return (
     <div
       className={`sidebar bg-white h-full w-96 fixed top-0 left-0 z-20 transition-transform duration-300 ease-in-out transform ${
@@ -120,45 +138,45 @@ useEffect(()=>{
         </Button>
 
         {/* History Cards */}
-         {Object.keys(groupedDocuments).map((date) => (
-        <div key={date} className="mt-6">
-          <h4 className="font-regular text-[#8B909A] mt-4 text-sm">{date}</h4>
-          {groupedDocuments[date].map((document:any) => (
-            <button
-              key={document.id} // Assuming each document has a unique ID
-              className={`bg-[#E5E8EC] rounded-xl w-full p-3 mt-4 ${
-                isHovered ? "bg-gray-300" : "" 
-              } ${activeId===document.id?"active":""}`}
+        {Object.keys(groupedDocuments).map((date) => (
+          <div key={date} className="mt-6">
+            <h4 className="font-regular text-[#8B909A] mt-4 text-sm">{date}</h4>
+            {groupedDocuments[date].map((document: any, index: number) => (
+              <button
+                key={document.id} // Assuming each document has a unique ID
+                className={`bg-[#E5E8EC] rounded-xl w-full p-3 mt-4 ${
+                  hoveredStates[index] ? "bg-gray-300" : ""
+                } ${activeId === document.id ? "active" : ""}`}
+                onMouseEnter={() => handleMouseEnter(index)}
+                onMouseLeave={() => handleMouseLeave(index)}
+                onClick={() => {
+                  handleHistoryClick(document.id);
+                }}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h1 className="font-semibold mr-6 text-left">
+                      {document.title}
+                    </h1>
+                    <p className="font-light text-[#808080] text-sm">
+                      {document.date} . {document?.duration || "..."} Mins Long
+                    </p>
+                  </div>
 
-
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-              onClick={()=>{
-                handleHistoryClick(document.id)
-              }}
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <h1 className="font-semibold mr-6 text-left">{document.title}</h1>
-                  <p className="font-light text-[#808080] text-sm">
-                    {document.date} . {document?.duration || '...'} Mins Long
-                  </p>
+                  {hoveredStates[index] && (
+                    <button type="button" onClick={onDeleteModalOpen}>
+                      <Image src={trash} alt="trash" />
+                    </button>
+                  )}
+                  <DeleteModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={onDeleteModalClose}
+                  />
                 </div>
-
-                {isHovered && (
-                  <button type="button" onClick={onDeleteModalOpen}>
-                    <Image src={trash} alt="trash" className="delete-button" />
-                  </button>
-                )}
-                <DeleteModal
-                  isOpen={isDeleteModalOpen}
-                  onClose={onDeleteModalClose}
-                />
-              </div>
-            </button>
-          ))}
-        </div>
-      ))}
+              </button>
+            ))}
+          </div>
+        ))}
       </div>
 
       <div className="flex flex-col mb-2 mt-auto p-2 bg-white">
@@ -185,7 +203,9 @@ useEffect(()=>{
                   />
                   <p className="mb-1 font-medium mr-2">John Deo</p>
                   <div className=" border px-2 border-blue-400 b-t-2 rounded-lg bg-blue-200 ">
-                    <p className="text-[#0058FA]">{getPlan(userData?.roles || [])}</p>
+                    <p className="text-[#0058FA]">
+                      {getPlan(userData?.roles || [])}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -215,7 +235,9 @@ useEffect(()=>{
                         John Deo
                       </h3>
                       <div className=" border px-2 border-blue-400 b-t-2 rounded-lg bg-blue-200 ">
-                        <p className="text-[#0058FA]">{getPlan(userData?.roles || [])}</p>
+                        <p className="text-[#0058FA]">
+                          {getPlan(userData?.roles || [])}
+                        </p>
                       </div>
                     </div>
                     <p className="text-tiny">{userData?.email}</p>

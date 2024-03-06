@@ -88,7 +88,7 @@ function Index() {
             <CardBody className="flex flex-col items-center justify-center">
               <Image src={friend} alt="" />
               <h3 className="text-center mt-6 text-3xl font-light ">
-                User Friend Interface
+                User Friendly Interface
               </h3>
             </CardBody>
           </Card>

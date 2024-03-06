@@ -48,9 +48,9 @@ function Index() {
       <section>
         <div className="flex flex-col lg:flex-row h-full bg-[#FAF9F6] overflow-x-hidden">
           {/* Content */}
-          <div className="flex-1 flex flex-col px-6 py-28 md:py-32 md:px-24 lg:px-32">
-            <button className="flex items-center justify-between gap-4 py-2 px-4 bg-[#FAE5D3] rounded-full mb-8 lg:mb-0 lg:w-[400px] w-96">
-              <p className="text-[#808080] text-xs   lg:text-sm">
+          <div className="flex-1 flex flex-col px-6 py-16 md:py-32 md:px-24 lg:px-32">
+            <button className="flex items-center justify-between gap-4 py-2 px-4 bg-[#FAE5D3] rounded-full mb-8 lg:mb-0 lg:w-[400px] w-80">
+              <p className="text-[#808080] text-xs lg:text-sm">
                 Learn how AI can help you with documentation.
               </p>
               <div className="bg-[#FBEADA] px-4 rounded-full p-2">
@@ -58,7 +58,7 @@ function Index() {
               </div>
             </button>
 
-            <h1 className="text-5xl lg:text-7xl font-semibold mt-16 mb-4">
+            <h1 className="text-5xl lg:text-7xl font-semibold mt-4 md:mt-16 mb-4">
               Innovating Veterinary Documentation!
             </h1>
             <div>
