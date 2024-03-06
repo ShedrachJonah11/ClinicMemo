@@ -1,5 +1,5 @@
 import Dexie from 'dexie';
-import { getCurrentDateTime } from '../utils/functions';
+import { getCurrentDateTime, getJSONdata } from '../utils/functions';
 
 // Define an interface for the Dexie database
 interface VetDB extends Dexie {
@@ -10,8 +10,8 @@ interface VetDB extends Dexie {
 const db = new Dexie('vetDB') as VetDB;
 
 // Define a table for documents
-db.version(1).stores({
-  docData: '++id,title,transcript,isFileUsed,note,summary,date,duration',
+db.version(2).stores({
+  docData: '++id,title,transcript,isFileUsed,note,summary,date,duration,email',
 });
 
 // Open the database asynchronously
@@ -70,10 +70,12 @@ export async function insertTranscriptDB(
 export async function createNewEncounterDB()
   {
     // Create a new instance of the TranscriptData interface
+    const userData= await getJSONdata("profile")
     await openDatabase();
     const tr = {
       title:"Encounter",
-      date:getCurrentDateTime()
+      date:getCurrentDateTime(),
+      email:userData.email
     };
   
     try {
@@ -90,8 +92,9 @@ export async function createNewEncounterDB()
   export async function getAllEncouterDB(): Promise<any[]> {
     try {
         await openDatabase();
+        const userData= await getJSONdata("profile")
       // Use the Dexie 'docData' table to retrieve all encounters asynchronously
-      const encounters = await db.docData.toArray();
+      const encounters = await db.docData.where({email:userData.email}).toArray();
       return encounters;
     } catch (error) {
       console.error('Error retrieving encounters: ', error);

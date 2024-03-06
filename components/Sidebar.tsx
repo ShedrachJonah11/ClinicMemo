@@ -16,6 +16,7 @@ import {
   Divider,
   CardBody,
 } from "@nextui-org/react";
+import { useRouter } from "next/router";
 import DeleteModal from "./DeleteModal";
 import PaymentPlanModal from "./PaymentPlanModal";
 import "../app/style.css";
@@ -23,7 +24,7 @@ import settings from "../public/settings.svg";
 import help from "../public/help.svg";
 import tag from "../public/tag-user.svg";
 import sign from "../public/sign out.svg";
-import { getJSONdata, getPlan } from "@/application/utils/functions";
+import { getJSONdata, getPlan, logOut } from "@/application/utils/functions";
 import {
   deleteEncounterDB,
   getAllEncouterDB,
@@ -45,6 +46,7 @@ const Sidebar: React.FC<SliderProps> = ({
   handleHistoryCardClick,
   activeId,
 }) => {
+  const router = useRouter();
   const {
     isOpen: isDeleteModalOpen,
     onOpen: onDeleteModalOpen,
@@ -83,7 +85,10 @@ const Sidebar: React.FC<SliderProps> = ({
       setUserData(getJSONdata("profile"));
     }
   }, []);
-
+const logoutpage=()=>{
+  logOut();
+  router.push("auth/login")
+}
   const groupedDocuments: any = {};
   documents.forEach((doc: any) => {
     const date = new Date(doc.date).toDateString();
@@ -178,7 +183,7 @@ const Sidebar: React.FC<SliderProps> = ({
                       {document.title}
                     </h1>
                     <p className="font-light text-[#808080] text-sm">
-                      {document.date} . {document?.duration || "..."} Mins Long
+                      {document.date} . {document?.duration || ""}
                     </p>
                   </div>
 
@@ -296,9 +301,10 @@ const Sidebar: React.FC<SliderProps> = ({
                       </p>
                     </div>
 
+                    {getPlan(userData?.roles || [])==="Free" && 
                     <Button className="mb-6 bg-[#008080] text-white">
                       Upgrade for $100/month
-                    </Button>
+                    </Button>}
                   </div>
                 ) : (
                   <div>
@@ -368,6 +374,9 @@ const Sidebar: React.FC<SliderProps> = ({
                       <button
                         type="button"
                         className="flex p-2 items-center mb-4"
+                        onClick={()=>{
+                          logoutpage()
+                        }}
                       >
                         <Image
                           src={sign}

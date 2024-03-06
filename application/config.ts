@@ -1,1 +1,1 @@
-export const APP_URL="https://med-scribe.askingstage.com"
+export const APP_URL="https://stagingapi.vetmemos.com"
