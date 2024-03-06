@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
   PopoverContent,
   Divider,
+  CardBody,
 } from "@nextui-org/react";
 import DeleteModal from "./DeleteModal";
 import PaymentPlanModal from "./PaymentPlanModal";
@@ -59,6 +60,14 @@ const Sidebar: React.FC<SliderProps> = ({
   const [documents, setDocuments] = useState<any>([]);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [isAccountPopoverOpen, setAccountPopoverOpen] =
+    useState<boolean>(false);
+
+  // Event handler to toggle account popover
+  const toggleAccountPopover = () => {
+    setAccountPopoverOpen(!isAccountPopoverOpen);
+  };
 
   const handleResetState = () => {
     resetState();
@@ -205,7 +214,7 @@ const Sidebar: React.FC<SliderProps> = ({
           }}
         >
           <PopoverTrigger>
-            <Button className="w-full flex py-8 px-2 bg-[#FBFBFB] rounded-xl justify-between items-center ">
+            <Button className="w-full flex py-8 px-2 bg-[#fff] rounded-xl justify-between items-center ">
               <div className="items-center">
                 <div className="flex items-center mt-2">
                   <Avatar
@@ -239,86 +248,144 @@ const Sidebar: React.FC<SliderProps> = ({
           <PopoverContent>
             {(titleProps) => (
               <div>
-                <div className="px-1 py-2 flex gap-2">
-                  <Avatar src="https" />
-                  <div>
-                    <div className="flex gap-2">
-                      <h3 className="text-small font-bold" {...titleProps}>
-                        {userData?.name}
-                      </h3>
-                      <div className=" border px-2 border-blue-400 b-t-2 rounded-lg bg-blue-200 ">
-                        <p className="text-[#0058FA]">
-                          {getPlan(userData?.roles || [])}
-                        </p>
-                      </div>
+                {isAccountPopoverOpen ? (
+                  <div className="w-full">
+                    <div className="mb-3 flex items-center justify-between">
+                      <h1 className="text-lg font-medium">Account</h1>
+                      <button>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill="none"
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M18 6L6 18M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
                     </div>
-                    <p className="text-tiny">{userData?.email}</p>
+                    <Divider className="mb-4" />
+
+                    <Card
+                      radius="lg"
+                      className="w-full md:w-[300px] rounded-full bg-[#FAF9F6] "
+                    >
+                      <CardBody>
+                        <p className="text-center">{userData?.email}</p>
+                      </CardBody>
+                    </Card>
+                    <div className="mt-6 mb-2">
+                      <h4 className="text-[#008080] text-xs font-medium">
+                        SUBSCRIPTION
+                      </h4>
+                    </div>
+                    <div className=" border px-2 w-12 border-blue-400 b-t-2 rounded-lg mb-2 bg-blue-200 ">
+                      <p className="text-[#0058FA]">
+                        {getPlan(userData?.roles || [])}
+                      </p>
+                    </div>
+                    <div className="mb-6">
+                      <p className="text-xs font-extralight">
+                        Limited to 30 conversations a month
+                      </p>
+                    </div>
+
+                    <Button className="mb-6 bg-[#008080] text-white">
+                      Upgrade for $100/month
+                    </Button>
                   </div>
-                  {/* <button> */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M18 6L6 18M6 6l12 12"
-                    />
-                  </svg>
-                  {/* </button> */}
-                </div>
-                <Divider />
-
-                <div>
-                  <button
-                    type="button"
-                    className="flex p-2 items-center mt-2 mb-4"
-                    onClick={onOpen}
-                  >
-                    <Image
-                      src={settings}
-                      alt=""
-                      width={25}
-                      height={25}
-                      className="mr-4"
-                    />
-                    <h1 className="text-base font-medium">Account</h1>
-                  </button>
-
-                  <button type="button" className="flex p-2 items-center mb-4">
-                    <Image
-                      src={help}
-                      alt=""
-                      width={25}
-                      height={25}
-                      className="mr-4"
-                    />
-                    <h1 className="text-base font-medium">Contact Us</h1>
-                  </button>
-                  <Divider />
-                  <button type="button" className="flex p-2 items-center mb-4">
-                    <Image
-                      src={sign}
-                      alt=""
-                      width={25}
-                      height={25}
-                      className="mr-4"
-                    />
-                    <h1 className="text-base font-medium">Sign Out</h1>
-                  </button>
-                </div>
+                ) : (
+                  <div>
+                    <div className="px-1 py-2 flex gap-2">
+                      <Avatar src="https" />
+                      <div>
+                        <div className="flex gap-2">
+                          <h3 className="text-small font-bold" {...titleProps}>
+                            {userData?.name}
+                          </h3>
+                          <div className="border px-2 border-blue-400 b-t-2 rounded-lg bg-blue-200">
+                            <p className="text-[#0058FA]">
+                              {getPlan(userData?.roles || [])}
+                            </p>
+                          </div>
+                        </div>
+                        <p className="text-tiny ml-2">{userData?.email}</p>
+                      </div>
+                      <button className="mb-6">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="20"
+                          height="20"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            fill="none"
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M18 6L6 18M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                    <Divider />
+                    <div>
+                      <button
+                        type="button"
+                        className="flex p-2 items-center mt-2 mb-4"
+                        onClick={toggleAccountPopover}
+                      >
+                        <Image
+                          src={settings}
+                          alt=""
+                          width={25}
+                          height={25}
+                          className="mr-4"
+                        />
+                        <h1 className="text-base font-medium">Account</h1>
+                      </button>
+                      <button
+                        type="button"
+                        className="flex p-2 items-center mb-4"
+                      >
+                        <Image
+                          src={help}
+                          alt=""
+                          width={25}
+                          height={25}
+                          className="mr-4"
+                        />
+                        <h1 className="text-base font-medium">Contact Us</h1>
+                      </button>
+                      <Divider />
+                      <button
+                        type="button"
+                        className="flex p-2 items-center mb-4"
+                      >
+                        <Image
+                          src={sign}
+                          alt=""
+                          width={25}
+                          height={25}
+                          className="mr-4"
+                        />
+                        <h1 className="text-base font-medium">Sign Out</h1>
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </PopoverContent>
         </Popover>
         {/* Profile button */}
-
-        <AccountModal isOpen={isOpen} onClose={onClose} />
 
         <button
           type="button"
