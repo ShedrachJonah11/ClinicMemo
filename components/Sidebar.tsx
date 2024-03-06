@@ -65,6 +65,7 @@ const Sidebar: React.FC<SliderProps> = ({
 
   const [isAccountPopoverOpen, setAccountPopoverOpen] =
     useState<boolean>(false);
+  const [isPopoverEnabled, setPopoverEnabled] = useState<boolean>(true); // New state to control popover button
 
   // Event handler to toggle account popover
   const toggleAccountPopover = () => {
@@ -85,10 +86,10 @@ const Sidebar: React.FC<SliderProps> = ({
       setUserData(getJSONdata("profile"));
     }
   }, []);
-const logoutpage=()=>{
-  logOut();
-  router.push("auth/login")
-}
+  const logoutpage = () => {
+    logOut();
+    router.push("auth/login");
+  };
   const groupedDocuments: any = {};
   documents.forEach((doc: any) => {
     const date = new Date(doc.date).toDateString();
@@ -136,6 +137,11 @@ const logoutpage=()=>{
     await deleteEncounterDB(activeId);
     loadDocuments();
   };
+
+  const handleCancelClick = () => {
+    setPopoverEnabled(false); // Disable the popover button when "Cancel" is clicked
+  };
+
   return (
     <div
       className={`sidebar bg-[#FAFAFA] h-full w-96 fixed top-0 left-0 z-20 transition-transform duration-300 ease-in-out transform ${
@@ -187,7 +193,7 @@ const logoutpage=()=>{
                     </p>
                   </div>
 
-                  {hoveredStates[index] && (
+                  {hoveredStates[index] && isPopoverEnabled && (
                     <button type="button" onClick={onDeleteModalOpen}>
                       <Image src={trash} alt="trash" />
                     </button>
@@ -257,7 +263,7 @@ const logoutpage=()=>{
                   <div className="w-full">
                     <div className="mb-3 flex items-center justify-between">
                       <h1 className="text-lg font-medium">Account</h1>
-                      <button>
+                      <button onClick={toggleAccountPopover}>
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="20"
@@ -301,10 +307,14 @@ const logoutpage=()=>{
                       </p>
                     </div>
 
-                    {getPlan(userData?.roles || [])==="Free" && 
-                    <Button className="mb-6 bg-[#008080] text-white">
-                      Upgrade for $100/month
-                    </Button>}
+                    {getPlan(userData?.roles || []) === "Free" && (
+                      <Button
+                        onClick={onPaymentModalOpen}
+                        className="mb-6 bg-[#008080] text-white"
+                      >
+                        Upgrade
+                      </Button>
+                    )}
                   </div>
                 ) : (
                   <div>
@@ -374,8 +384,8 @@ const logoutpage=()=>{
                       <button
                         type="button"
                         className="flex p-2 items-center mb-4"
-                        onClick={()=>{
-                          logoutpage()
+                        onClick={() => {
+                          logoutpage();
                         }}
                       >
                         <Image

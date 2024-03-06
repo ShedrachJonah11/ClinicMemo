@@ -22,7 +22,7 @@ function index() {
           </p>
           <div className="flex items-center p-2 gap-2 md:gap-6 mb-6">
             <Image src={mail} alt="" />
-            <p className="text-white text-sm md:text">Info@clinicmemo.com</p>
+            <p className="text-white text-sm md:text">Info@VetMemos.com</p>
 
             <Image src={phone} alt="" />
             <p className="text-white text-sm md:text">
