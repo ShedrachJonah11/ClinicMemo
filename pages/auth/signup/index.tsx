@@ -133,6 +133,7 @@ function Index() {
             }}
           />
           <Input
+            name="password"
             label="Password"
             placeholder="Create a password"
             variant="bordered"
@@ -152,8 +153,11 @@ function Index() {
             type={isVisible ? "text" : "password"}
             className="mt-4"
             onChange={(e: any) => {
-              userData.password = e.target.value;
-              setUserData(userData);
+              const { name, value } = e.target;
+              setUserData((prevState: any) => ({
+                ...prevState,
+                [name]: value,
+              }));
             }}
           />
 
