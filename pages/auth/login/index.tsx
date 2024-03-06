@@ -61,11 +61,14 @@ function Index() {
 
           if (data.detail === "LOGIN_BAD_CREDENTIALS") {
             // Handle invalid password error
+            toast.error("Account does not exist");
           } else {
             // Handle other error scenarios
+            toast.error("Unknown error");
           }
         } else {
           // Handle other types of errors
+          toast.error("Unknown error");
         }
       }
     }

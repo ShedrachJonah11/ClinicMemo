@@ -70,8 +70,10 @@ function Index() {
 
           if (data.detail === "REGISTER_INVALID_PASSWORD") {
             // Handle invalid password error
+            toast.error("Invalid Password");
           } else if (data.detail === "REGISTER_USER_ALREADY_EXISTS") {
             // Handle user already exists error
+            toast.error("Account already exist, please login");
           } else {
             // Handle other error scenarios
           }

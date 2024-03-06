@@ -140,12 +140,12 @@ function Index() {
     await updateEncounterDB(
       currentDocument,
       "summary",
-      JSON.stringify(req.note_content)
+      JSON.stringify(req)
     );
     setActiveTab("note");
-    setGNote(req.note_content);
-    console.log(req);
-    return req.note_content;
+    setGNote(req);
+    //console.log("note here",req);
+    return req;
   };
   const regenerate = async () => {
     // console.log(req.response);
