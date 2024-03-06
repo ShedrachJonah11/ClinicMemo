@@ -58,7 +58,7 @@ function Index() {
               </div>
             </button>
 
-            <h1 className="text-5xl lg:text-7xl font-semibold mt-4 md:mt-16 mb-4">
+            <h1 className="text-4xl lg:text-7xl font-semibold mt-4 md:mt-16 mb-4">
               Innovating Veterinary Documentation!
             </h1>
             <div>

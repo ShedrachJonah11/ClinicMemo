@@ -178,14 +178,10 @@ function Index() {
         />
 
         {/* Main Content */}
-        <div
-          className={`h-screen flex-1 ${
-            isSidebarOpen ? "lg:ml-96" : ""
-          } bg-[#FBFBFB]`}
-        >
+        <div className={`h-screen flex-1 ${isSidebarOpen ? "lg:ml-96" : ""} `}>
           {/* Header */}
           <div
-            className={`bg-white shadow h-16 flex items-center justify-between px-4 ${
+            className={`bg-[#FAFAFA] shadow h-16 flex items-center justify-between px-4 ${
               isSidebarOpen ? "w-full" : ""
             }`}
           >

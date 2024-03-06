@@ -29,132 +29,143 @@ import arrowdown from "../public/arrow-down.svg";
 import file from "../public/document-forward.svg";
 import { getCurrentDateTime, getJSONdata } from "@/application/utils/functions";
 import axiosInstance from "@/application/api/axiosInstance";
-import { getEncouterDB, insertTranscriptDB, updateEncounterDB } from "@/application/database/database";
+import {
+  getEncouterDB,
+  insertTranscriptDB,
+  updateEncounterDB,
+} from "@/application/database/database";
 import Loader from "./Loader";
 import { generateNote, getTranscript } from "@/application/api/apis";
 import Microphone from "./microphone";
 
-
-
-const PageData=({activeTab,setActiveTab,id,updateTranscript,generateAutoNote,gnote,setGNote}:{activeTab:any,id:any,setActiveTab:any,updateTranscript:any,generateAutoNote:any,gnote:any,setGNote:any})=>{
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
-    const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
-    const [transcript, setTranscript] = useState("[]");
-    const [isRecording, setIsRecording] = useState(false);
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const [showNoteCards, setShowNoteCards] = useState(false);
-    const [userData,setUserData]=useState<any>()
-    const [isListening,setListening]=useState(false);
-    const [isLoading,setLoading]=useState(false);
-    const languages = ["English", "Spanish", "French", "German"];
-    const [allData,setAllData]=useState<any>({})
-    const [pnote,setPNote]=useState("");
-    
+const PageData = ({
+  activeTab,
+  setActiveTab,
+  id,
+  updateTranscript,
+  generateAutoNote,
+  gnote,
+  setGNote,
+}: {
+  activeTab: any;
+  id: any;
+  setActiveTab: any;
+  updateTranscript: any;
+  generateAutoNote: any;
+  gnote: any;
+  setGNote: any;
+}) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
+  const [transcript, setTranscript] = useState("[]");
+  const [isRecording, setIsRecording] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [showNoteCards, setShowNoteCards] = useState(false);
+  const [userData, setUserData] = useState<any>();
+  const [isListening, setListening] = useState(false);
+  const [isLoading, setLoading] = useState(false);
+  const languages = ["English", "Spanish", "French", "German"];
+  const [allData, setAllData] = useState<any>({});
+  const [pnote, setPNote] = useState("");
 
   const [showUploadContent, setShowUploadContent] = useState(false);
 
-  const loadDocument= async ()=>{
-    try{
-    setGNote(undefined)
-  const data = await getEncouterDB(id)
-  setAllData(data);
-  if(data.note){
-  setPNote(data.note) 
-  }
-  if(data.summary){
-  setGNote(JSON.parse(data.summary)) 
-  console.log(data.summary)
-  }
-  if(data.transcript){
-  updateTranscript(data.transcript)
-  }
-  loadTranscriptIfFile(data);
-  console.log(data);
-    }catch(e){
-
-    }
-  }
-  const loadTranscriptIfFile= async (data:any)=>{
-    try{
-    if(data.isFileUsed!=null && data.transcript==null){
-        console.log("here")
+  const loadDocument = async () => {
+    try {
+      setGNote(undefined);
+      const data = await getEncouterDB(id);
+      setAllData(data);
+      if (data.note) {
+        setPNote(data.note);
+      }
+      if (data.summary) {
+        setGNote(JSON.parse(data.summary));
+        console.log(data.summary);
+      }
+      if (data.transcript) {
+        updateTranscript(data.transcript);
+      }
+      loadTranscriptIfFile(data);
+      console.log(data);
+    } catch (e) {}
+  };
+  const loadTranscriptIfFile = async (data: any) => {
+    try {
+      if (data.isFileUsed != null && data.transcript == null) {
+        console.log("here");
         const req = await getTranscript(data.isFileUsed);
-        if(req.transcription_status=="DONE"){
-            updateEncounterDB(id,"transcript",req.text);
+        if (req.transcription_status == "DONE") {
+          updateEncounterDB(id, "transcript", req.text);
+          loadDocument();
+        } else {
+          setTimeout(() => {
             loadDocument();
-        }else{
-            setTimeout(()=>{
-                loadDocument(); 
-            },5000)
+          }, 5000);
         }
         console.log(req);
-    }}catch(e){
-        console.log(e)
+      }
+    } catch (e) {
+      console.log(e);
     }
-  }
-  
-  useEffect(()=>{
+  };
+
+  useEffect(() => {
     loadDocument();
-    
-  },[])
+  }, []);
 
   const handleUploadButtonClick = () => {
     setShowUploadContent(true);
   };
-  
-  const onBlobUpdate = (blob:any) => {
+
+  const onBlobUpdate = (blob: any) => {
     // Access the blob data outside the hook
     console.log("Updated blob data:", blob);
     // Process or use the blob data as needed
   };
 
-
   const startRecording = async () => {
     try {
       setIsRecording(true);
-      
     } catch (error) {
-        console.error('Error accessing microphone:', error);
+      console.error("Error accessing microphone:", error);
     }
-};
+  };
 
-
-const stopRecording = async () => {
+  const stopRecording = async () => {
     setIsRecording(false);
-
-}
-let cn=0;
-
-
+  };
+  let cn = 0;
 
   // Function to pause recording
   const pauseRecording = () => {};
 
   // Function to resume recording
   const resumeRecording = () => {};
-  function processTranscript(jsonString:any) {
+  function processTranscript(jsonString: any) {
     try {
       const transcriptArray = JSON.parse(jsonString);
-  
+
       if (Array.isArray(transcriptArray)) {
         // If it's an array (assumed to be JSON), generate divs for each entry
         const divs = transcriptArray.map((entry, index) => (
           <div key={index}>
-            <div style={{ fontSize: 'small',marginBottom:"10px" }}>{entry.date}</div>
+            <div style={{ fontSize: "small", marginBottom: "10px" }}>
+              {entry.date}
+            </div>
 
-            <div>{entry.text}</div>
-            <br/>
+            <div className="text-sm">{entry.text}</div>
+            <br />
           </div>
         ));
-  
+
         return divs;
       }
     } catch (error) {
       // If parsing as JSON fails, treat it as a plain text and return it
       return <div>{jsonString}</div>;
     }
-  
+
     // If it's not JSON, treat it as plain text and return it
     return <div>{jsonString}</div>;
   }
@@ -162,67 +173,77 @@ let cn=0;
     setSelectedLanguage(language);
   };
 
-      const uploadFileTrans = async (file:any) => {
-        setLoading(true);
-      
-        try {
-          const formData = new FormData();
-          formData.append('audio_file', file);
-      
-          // Assuming you have an axios instance named 'axiosInstance' configured with your API base URL
-          const response = await axiosInstance.post('/transcription/upload-audio', formData);
-      
-          // Handle the response from the server
-          console.log('Upload successful:', response.data);
-          //insertTranscriptDB(file.name,"",response.data.status_id,"","",getCurrentDateTime())
-          await updateEncounterDB(id,"isFileUsed",response.data.status_id);
-          loadDocument();
-          setLoading(false);
-      
-          // You can perform additional actions with the response data if needed
-      
-        } catch (error) {
-          // Handle errors during file upload
-          console.error('Error uploading file:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      const generateMainNote= async ()=>{
-        try{
-            setLoading(true);
-        const data = await generateAutoNote();
-        setLoading(false);
-        if(data){
-            //setGNote(data);
-        }
-        }catch(e){
-            console.log(e)
-            setLoading(false);
-        }
+  const uploadFileTrans = async (file: any) => {
+    setLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("audio_file", file);
+
+      // Assuming you have an axios instance named 'axiosInstance' configured with your API base URL
+      const response = await axiosInstance.post(
+        "/transcription/upload-audio",
+        formData
+      );
+
+      // Handle the response from the server
+      console.log("Upload successful:", response.data);
+      //insertTranscriptDB(file.name,"",response.data.status_id,"","",getCurrentDateTime())
+      await updateEncounterDB(id, "isFileUsed", response.data.status_id);
+      loadDocument();
+      setLoading(false);
+
+      // You can perform additional actions with the response data if needed
+    } catch (error) {
+      // Handle errors during file upload
+      console.error("Error uploading file:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const generateMainNote = async () => {
+    try {
+      setLoading(true);
+      const data = await generateAutoNote();
+      setLoading(false);
+      if (data) {
+        //setGNote(data);
       }
-      const transcriptCallBack = async (text: any) => {
-        console.log(text)
-        const data = {
-          date: getCurrentDateTime(),
-          text: text,
-        };
-        let dbdata = await getEncouterDB(id);
-          try {
-            
-            const existingTranscript = JSON.parse(dbdata.transcript?dbdata.transcript:"[]");
-              existingTranscript.push(data);
-              setTranscript(JSON.stringify(existingTranscript));
-              await updateEncounterDB(id,"transcript",JSON.stringify(existingTranscript))
-          } catch (error) {
-            setTranscript(dbdata.transcript + text);
-            await updateEncounterDB(id,"transcript",dbdata.transcript + text)
-          }
-          loadDocument();
-        } 
-    return (
-        <div className="h-full">
-        {activeTab === "transcript" && !isRecording && (allData.transcript=="" || allData.transcript==null ) && (allData.isFileUsed==null) && (
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
+    }
+  };
+  const transcriptCallBack = async (text: any) => {
+    console.log(text);
+    const data = {
+      date: getCurrentDateTime(),
+      text: text,
+    };
+    let dbdata = await getEncouterDB(id);
+    try {
+      const existingTranscript = JSON.parse(
+        dbdata.transcript ? dbdata.transcript : "[]"
+      );
+      existingTranscript.push(data);
+      setTranscript(JSON.stringify(existingTranscript));
+      await updateEncounterDB(
+        id,
+        "transcript",
+        JSON.stringify(existingTranscript)
+      );
+    } catch (error) {
+      setTranscript(dbdata.transcript + text);
+      await updateEncounterDB(id, "transcript", dbdata.transcript + text);
+    }
+    loadDocument();
+  };
+  return (
+    <div className="relative h-full">
+      {activeTab === "transcript" &&
+        !isRecording &&
+        (allData.transcript == "" || allData.transcript == null) &&
+        allData.isFileUsed == null && (
           <div className="h-full flex justify-center items-center">
             <div className="p-4 relative max-w-xl w-full">
               <Card className="w-full lg:w-[450px]">
@@ -269,15 +290,16 @@ let cn=0;
                         Supported files: MP3, WAV, M4A
                       </p>
                       <label>
-                      <div
-                        className="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-unit-6 min-w-unit-24 h-unit-12 text-medium gap-unit-3 rounded-large [&>svg]:max-w-[theme(spacing.unit-8)] data-[pressed=true]:scale-[0.97] transition-transform-colors-opacity motion-reduce:transition-none text-default-foreground data-[hover=true]:opacity-hover w-full md:w-[300px] bg-[#008080] mt-6 mb-6"
-                        
-                      >
-                        <h1 className="text-white font-bold">Upload Audio</h1>
-                      </div>
-                      <input type="file" style={{display:"none"}} onChange={(e:any)=>{
-                        uploadFileTrans(e.target.files[0]); 
-                      }} />
+                        <div className="z-0 group relative inline-flex items-center justify-center box-border appearance-none select-none whitespace-nowrap font-normal subpixel-antialiased overflow-hidden tap-highlight-transparent outline-none data-[focus-visible=true]:z-10 data-[focus-visible=true]:outline-2 data-[focus-visible=true]:outline-focus data-[focus-visible=true]:outline-offset-2 px-unit-6 min-w-unit-24 h-unit-12 text-medium gap-unit-3 rounded-large [&>svg]:max-w-[theme(spacing.unit-8)] data-[pressed=true]:scale-[0.97] transition-transform-colors-opacity motion-reduce:transition-none text-default-foreground data-[hover=true]:opacity-hover w-full md:w-[300px] bg-[#008080] mt-6 mb-6">
+                          <h1 className="text-white font-bold">Upload Audio</h1>
+                        </div>
+                        <input
+                          type="file"
+                          style={{ display: "none" }}
+                          onChange={(e: any) => {
+                            uploadFileTrans(e.target.files[0]);
+                          }}
+                        />
                       </label>
                     </div>
                   ) : (
@@ -327,193 +349,187 @@ let cn=0;
           </div>
         )}
 
-        {activeTab === "transcript" && allData.isFileUsed!=null && allData.transcript==null && (
-            <div className="flex items-center justify-center h-screen">
+      {activeTab === "transcript" &&
+        allData.isFileUsed != null &&
+        allData.transcript == null && (
+          <div className="flex items-center justify-center h-screen">
             <Loader />
             <div className="ml-4">Generating Transcript</div>
           </div>
-        ) }
-        {activeTab === "transcript" &&  allData.transcript!=null  && allData.transcript!="" && (
-            <div>
-               {processTranscript(allData.transcript) /* transcript here  */} 
-               <Button className="button" onClick={ ()=>{
-              
-                generateMainNote()
-               }}>
-                Generate Note
-               </Button>
-            </div>
-        ) }
-        <div>
-          {activeTab === "note" && gnote!=undefined && (
-            <div className="p-4 justify-between flex-col sm:flex-row">
-              <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between mb-6">
-                <Card className="w-full sm:w-1/2">
-                  <CardBody>
-                    <CardHeader>
-                      <h1 className="font-semibold">OBJECTIVE</h1>
-                    </CardHeader>
-                    <div className="p-4">
-                    {gnote.objective}
-                    </div>
-                    <div className="flex p-4 gap-2">
-                      <button>
-                        <Image src={mic} alt="" />
-                      </button>
-                      <button>
-                        <Image src={copy} alt="" />
-                      </button>
-                    </div>
-                  </CardBody>
-                </Card>
-                <Card className="w-full sm:w-1/2">
-                  <CardBody>
-                    <CardHeader>
-                      <h1 className="font-bold">SUBJECTIVE</h1>
-                    </CardHeader>
-                    <div className="p-4">
-                    {gnote.subjective}
-                    </div>
-                    <div className="flex p-4 gap-2">
-                      <button type="button">
-                        <Image src={mic} alt="" />
-                      </button>
-                      <button type="button">
-                        <Image src={copy} alt="" />
-                      </button>
-                    </div>
-                  </CardBody>
-                </Card>
-              </div>
-
-              {/* Second Row */}
-              <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between mb-4">
-                <Card className="w-full sm:w-1/2">
-                  <CardBody>
-                    <CardHeader>
-                      <h1 className="font-semibold">ASSESSMENT</h1>
-                    </CardHeader>
-                    <div className="p-4">
-                    {gnote.assessment}
-                    </div>
-                    <div className="flex p-4 gap-2">
-                      <button type="button">
-                        <Image src={mic} alt="" />
-                      </button>
-                      <button type="button">
-                        <Image src={copy} alt="" />
-                      </button>
-                    </div>
-                  </CardBody>
-                </Card>
-                <Card className="w-full sm:w-1/2">
-                  <CardBody>
-                    <CardHeader>
-                      <h1 className="font-bold">PLAN</h1>
-                    </CardHeader>
-                    <div className="p-4">
-                        {gnote.plan}
-                   
-                    </div>
-                    <div className="flex p-4 gap-2">
-                      <button type="button">
-                        <Image src={mic} alt="" />
-                      </button>
-                      <button type="button">
-                        <Image src={copy} alt="" />
-                      </button>
-                    </div>
-                  </CardBody>
-                </Card>
-              </div>
-              {/* Second Row */}
-              <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between">
-                <Card className="w-full sm:w-1/2">
-                  <CardBody>
-                    <CardHeader>
-                      <h1 className="font-semibold">PRESCRIPTIONS</h1>
-                    </CardHeader>
-                    <div className="p-4">
-                      <p className="list-dot">50 dosage of ibuprofen</p>
-                    </div>
-                    <div className="flex p-4 gap-2">
-                      <button type="button">
-                        <Image src={mic} alt="" />
-                      </button>
-                      <button type="button">
-                        <Image src={copy} alt="" />
-                      </button>
-                    </div>
-                  </CardBody>
-                </Card>
-                <Card className="w-full sm:w-1/2">
-                  <CardBody>
-                    <CardHeader>
-                      <h1 className="font-bold">APPOINTMENT</h1>
-                    </CardHeader>
-                    <div className="p-4">
-                      <p className="list-dot">
-                        follow up check on the 24th February
-                      </p>
-                    </div>
-                    <div className="flex p-4 gap-2">
-                      <button type="button">
-                        <Image src={mic} alt="" />
-                      </button>
-                      <button type="button">
-                        <Image src={copy} alt="" />
-                      </button>
-                    </div>
-                  </CardBody>
-                </Card>
-              </div>
-            </div>
-          )}
-          {activeTab === "note" && (
-            <div className="p-4 mt-4">
-               
-              <Card className="w-full bg-white">
+        )}
+      {activeTab === "transcript" &&
+        allData.transcript != null &&
+        allData.transcript != "" && (
+          <div className="py-10 px-10">
+            {processTranscript(allData.transcript) /* transcript here  */}
+            <Button
+              size="lg"
+              className="button bg-[#008080] text-white fixed right-5 bottom-10"
+              onClick={() => {
+                generateMainNote();
+                setActiveTab("note");
+              }}
+            >
+              Generate Note
+            </Button>
+          </div>
+        )}
+      <div>
+        {activeTab === "note" && gnote != undefined && (
+          <div className="p-4 justify-between flex-col sm:flex-row">
+            <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between mb-6">
+              <Card className="w-full sm:w-1/2">
                 <CardBody>
-                  {/* Your "Note" content here */}
-                  <h1 className="mt-4 font-medium text-[#1E1E1E]">
-                    PERSONALIZED NOTE
-                  </h1>
-                  <Textarea
-                    className=" rounded-lg  mb-4 mt-4"
-                    placeholder="Type anything here....."
-                    value={pnote}
-                    onChange={(e)=>{
-                      setPNote(e.target.value)  
-                      updateEncounterDB(id,"note",e.target.value)
-                    }}
-            
-                  />
+                  <CardHeader>
+                    <h1 className="font-semibold">OBJECTIVE</h1>
+                  </CardHeader>
+                  <div className="p-4">{gnote.objective}</div>
+                  <div className="flex p-4 gap-2">
+                    <button>
+                      <Image src={mic} alt="" />
+                    </button>
+                    <button>
+                      <Image src={copy} alt="" />
+                    </button>
+                  </div>
                 </CardBody>
               </Card>
-              
+              <Card className="w-full sm:w-1/2">
+                <CardBody>
+                  <CardHeader>
+                    <h1 className="font-bold">SUBJECTIVE</h1>
+                  </CardHeader>
+                  <div className="p-4">{gnote.subjective}</div>
+                  <div className="flex p-4 gap-2">
+                    <button type="button">
+                      <Image src={mic} alt="" />
+                    </button>
+                    <button type="button">
+                      <Image src={copy} alt="" />
+                    </button>
+                  </div>
+                </CardBody>
+              </Card>
             </div>
-          )}
-        </div>
 
-        {activeTab === "transcript" && isRecording && (
-          <>
-          <div className="flex mt-6 justify-between p-4">
-          <div className="p-4">
-            
+            {/* Second Row */}
+            <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between mb-4">
+              <Card className="w-full sm:w-1/2">
+                <CardBody>
+                  <CardHeader>
+                    <h1 className="font-semibold">ASSESSMENT</h1>
+                  </CardHeader>
+                  <div className="p-4">{gnote.assessment}</div>
+                  <div className="flex p-4 gap-2">
+                    <button type="button">
+                      <Image src={mic} alt="" />
+                    </button>
+                    <button type="button">
+                      <Image src={copy} alt="" />
+                    </button>
+                  </div>
+                </CardBody>
+              </Card>
+              <Card className="w-full sm:w-1/2">
+                <CardBody>
+                  <CardHeader>
+                    <h1 className="font-bold">PLAN</h1>
+                  </CardHeader>
+                  <div className="p-4">{gnote.plan}</div>
+                  <div className="flex p-4 gap-2">
+                    <button type="button">
+                      <Image src={mic} alt="" />
+                    </button>
+                    <button type="button">
+                      <Image src={copy} alt="" />
+                    </button>
+                  </div>
+                </CardBody>
+              </Card>
             </div>
-            <div className="flex bg-[#E5E8EC] h-16 rounded-full px-6 py-2 gap-4 ">
-          <Microphone 
-          callback={transcriptCallBack}
-          stopRecording={stopRecording}
-          id={id}
-          />
+            {/* Second Row */}
+            <div className="flex flex-col sm:flex-row gap-4 flex-grow justify-between">
+              <Card className="w-full sm:w-1/2">
+                <CardBody>
+                  <CardHeader>
+                    <h1 className="font-semibold">PRESCRIPTIONS</h1>
+                  </CardHeader>
+                  <div className="p-4">
+                    <p className="list-dot">50 dosage of ibuprofen</p>
+                  </div>
+                  <div className="flex p-4 gap-2">
+                    <button type="button">
+                      <Image src={mic} alt="" />
+                    </button>
+                    <button type="button">
+                      <Image src={copy} alt="" />
+                    </button>
+                  </div>
+                </CardBody>
+              </Card>
+              <Card className="w-full sm:w-1/2">
+                <CardBody>
+                  <CardHeader>
+                    <h1 className="font-bold">APPOINTMENT</h1>
+                  </CardHeader>
+                  <div className="p-4">
+                    <p className="list-dot">
+                      follow up check on the 24th February
+                    </p>
+                  </div>
+                  <div className="flex p-4 gap-2">
+                    <button type="button">
+                      <Image src={mic} alt="" />
+                    </button>
+                    <button type="button">
+                      <Image src={copy} alt="" />
+                    </button>
+                  </div>
+                </CardBody>
+              </Card>
+            </div>
           </div>
-          </div>
-           </>
         )}
-        {isLoading && <Loader type={'FULL'}/>}
+        {activeTab === "note" && (
+          <div className="p-4 mt-4">
+            <Card className="w-full bg-white">
+              <CardBody>
+                {/* Your "Note" content here */}
+                <h1 className="mt-4 font-medium text-[#1E1E1E]">
+                  PERSONALIZED NOTE
+                </h1>
+                <Textarea
+                  className=" rounded-lg  mb-4 mt-4"
+                  placeholder="Type anything here....."
+                  value={pnote}
+                  onChange={(e) => {
+                    setPNote(e.target.value);
+                    updateEncounterDB(id, "note", e.target.value);
+                  }}
+                />
+              </CardBody>
+            </Card>
+          </div>
+        )}
       </div>
-    )
-}
 
-export default PageData
+      {activeTab === "transcript" && isRecording && (
+        <>
+          <div className="flex fixed top-10 right-0 mt-6 justify-between p-4">
+            <div className="p-4"></div>
+            <div className="flex bg-[#E5E8EC] h-16 rounded-full px-6 py-2 gap-4 ">
+              <Microphone
+                callback={transcriptCallBack}
+                stopRecording={stopRecording}
+                id={id}
+              />
+            </div>
+          </div>
+        </>
+      )}
+      {isLoading && <Loader type={"FULL"} />}
+    </div>
+  );
+};
+
+export default PageData;

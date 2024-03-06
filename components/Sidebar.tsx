@@ -114,7 +114,7 @@ const Sidebar: React.FC<SliderProps> = ({
 
   return (
     <div
-      className={`sidebar bg-white h-full w-96 fixed top-0 left-0 z-20 transition-transform duration-300 ease-in-out transform ${
+      className={`sidebar bg-[#FAFAFA] h-full w-96 fixed top-0 left-0 z-20 transition-transform duration-300 ease-in-out transform ${
         isSidebarOpen ? "translate-x-0 " : "-translate-x-full"
       } flex flex-col `}
       style={{ maxHeight: "100vh", overflowY: "auto" }}
@@ -144,7 +144,7 @@ const Sidebar: React.FC<SliderProps> = ({
             {groupedDocuments[date].map((document: any, index: number) => (
               <button
                 key={document.id} // Assuming each document has a unique ID
-                className={`bg-[#E5E8EC] rounded-xl w-full p-3 mt-4 ${
+                className={`bg-[#E5E8EC] rounded-xl h-16 w-full p-3 mt-4 ${
                   hoveredStates[index] ? "bg-gray-300" : ""
                 } ${activeId === document.id ? "active" : ""}`}
                 onMouseEnter={() => handleMouseEnter(index)}
@@ -155,7 +155,7 @@ const Sidebar: React.FC<SliderProps> = ({
               >
                 <div className="flex items-center justify-between">
                   <div>
-                    <h1 className="font-semibold mr-6 text-left">
+                    <h1 className="font-normal mr-6 text-left">
                       {document.title}
                     </h1>
                     <p className="font-light text-[#808080] text-sm">
@@ -179,7 +179,8 @@ const Sidebar: React.FC<SliderProps> = ({
         ))}
       </div>
 
-      <div className="flex flex-col mb-2 mt-auto p-2 bg-white">
+      {/* Bottom section */}
+      <div className="flex flex-col mt-auto p-2 bg-[#FAFAFA]  sticky bottom-0 z-50">
         <Popover
           showArrow
           placement="top"
