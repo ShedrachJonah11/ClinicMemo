@@ -303,7 +303,7 @@ const Sidebar: React.FC<SliderProps> = ({
                 ) : (
                   <div>
                     <div className="px-1 py-2 flex gap-2">
-                      <Avatar src="https" />
+                      <Avatar src="https://i.pravatar.cc/150?u=a042581f4e29026024d" />
                       <div>
                         <div className="flex gap-2">
                           <h3 className="text-small font-bold" {...titleProps}>

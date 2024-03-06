@@ -7,26 +7,27 @@ import Link from "next/link";
 import arrowback from "../../../public/menu2.svg";
 import { forgotPassword } from "@/application/api/apis";
 import Loader from "@/components/Loader";
+import router from "next/router";
 
 function Index() {
-  const [email,setEmail]=useState("")
-  const [isLoading,setLoading]=useState(false)
+  const [email, setEmail] = useState("");
+  const [isLoading, setLoading] = useState(false);
 
-  const resetPass= async ()=>{
-    if(email.length<1){
-      //show error 
+  const resetPass = async () => {
+    if (email.length < 1) {
+      //show error
     }
-    try{
-      setLoading(true)
-   const data = await forgotPassword(email)
-   setLoading(false)
-   console.log(data)
-   //redirect user to check email here
-    }catch(e){
-      console.log(e)
-      setLoading(false)
+    try {
+      setLoading(true);
+      const data = await forgotPassword(email);
+      setLoading(false);
+      console.log(data);
+      router.push("/auth/reset-password");
+    } catch (e) {
+      console.log(e);
+      setLoading(false);
     }
-  }
+  };
   return (
     <div className="bg-cover bg-center h-screen flex items-center justify-center">
       <Image src={bg} alt="Background" layout="fill" objectFit="cover" />
@@ -45,8 +46,8 @@ function Index() {
             label="Enter your email"
             className=""
             value={email}
-            onChange={(e)=>{
-              setEmail(e.target.value)
+            onChange={(e) => {
+              setEmail(e.target.value);
             }}
           />
 
@@ -56,17 +57,20 @@ function Index() {
                 <p className="text-black text-semibold ">Cancel</p>
               </Button>
             </Link>
-            
-              <Button size="lg" className="w-full mt-6 bg-[#008080]" onClick={()=>{
-                resetPass()
-              }}>
-                <p className="text-white text-semibold ">Next</p>
-              </Button>
-            
+
+            <Button
+              size="lg"
+              className="w-full mt-6 bg-[#008080]"
+              onClick={() => {
+                resetPass();
+              }}
+            >
+              <p className="text-white text-semibold ">Next</p>
+            </Button>
           </div>
         </CardBody>
       </Card>
-      {isLoading && <Loader type={'FULL'}/>}
+      {isLoading && <Loader type={"FULL"} />}
     </div>
   );
 }
