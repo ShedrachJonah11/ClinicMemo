@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import bg from "../../../public/bgauth.svg";
 import lock from "../../../public/lock.svg";
 import Image from "next/image";
 import { Button, Card, CardBody, Input } from "@nextui-org/react";
 import Link from "next/link";
 import arrowback from "../../../public/menu2.svg";
+import { forgotPassword } from "@/application/api/apis";
+import Loader from "@/components/Loader";
 
 function Index() {
+  const [email,setEmail]=useState("")
+  const [isLoading,setLoading]=useState(false)
+
+  const resetPass= async ()=>{
+    if(email.length<1){
+      //show error 
+    }
+    try{
+      setLoading(true)
+   const data = await forgotPassword(email)
+   setLoading(false)
+   console.log(data)
+   //redirect user to check email here
+    }catch(e){
+      console.log(e)
+      setLoading(false)
+    }
+  }
   return (
     <div className="bg-cover bg-center h-screen flex items-center justify-center">
       <Image src={bg} alt="Background" layout="fill" objectFit="cover" />
@@ -24,22 +44,29 @@ function Index() {
             variant="bordered"
             label="Enter your email"
             className=""
+            value={email}
+            onChange={(e)=>{
+              setEmail(e.target.value)
+            }}
           />
 
           <div className="flex w-full gap-4">
-            <Link href="/auth/verify" className="w-full">
+            <Link href="/auth/login" className="w-full">
               <Button variant="bordered" size="lg" className="w-full mt-6 ">
                 <p className="text-black text-semibold ">Cancel</p>
               </Button>
             </Link>
-            <Link href="/auth/verify" className="w-full">
-              <Button size="lg" className="w-full mt-6 bg-[#008080]">
+            
+              <Button size="lg" className="w-full mt-6 bg-[#008080]" onClick={()=>{
+                resetPass()
+              }}>
                 <p className="text-white text-semibold ">Next</p>
               </Button>
-            </Link>
+            
           </div>
         </CardBody>
       </Card>
+      {isLoading && <Loader type={'FULL'}/>}
     </div>
   );
 }

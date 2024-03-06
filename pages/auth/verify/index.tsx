@@ -26,6 +26,7 @@ export default function Verify() {
         console.log(token);
         await verifyAccount(token);
         setVerifed(true);
+        router.push("/auth/verified")
       }
     } catch (error) {
       console.error("Error retrieving data:", error);
@@ -38,34 +39,6 @@ export default function Verify() {
   }, [query.token]);
 
   return (
-    <div className="bg-cover bg-center h-screen flex items-center justify-center">
-      <Image src={bg} alt="Background" layout="fill" objectFit="cover" />
-      <Card className="w-96 sm:w-[450px] p-6 bg-opacity-75">
-      
-        <CardBody className="flex flex-col items-center">
-          <Image src={mail} alt="" className="mt-2" />
-
-          <p className="text-black text-semibold text-2xl md:text-lg  mt-4 text-center mb-6">
-            We sent a link to verify your email address to
-            {userData?.email}. Please check your inbox or spam
-          </p>
-
-          <Link href={"/auth/login"} className="w-full">
-            <Button size="lg" className="w-full mt-6 bg-[#008080]">
-              <p className="text-white text-semibold">Login</p>
-            </Button>
-          </Link>
-
-          <div className="flex justify-center mt-4 items-center">
-            <p className="flex">
-              Didn&apos;t receive the email?
-              <Link href={""} className="ml-1 text-[#008080]">
-                Resend it
-              </Link>
-            </p>
-          </div>
-        </CardBody>
-      </Card>
-    </div>
+    <Loader type={'FULL'}/>
   );
 }

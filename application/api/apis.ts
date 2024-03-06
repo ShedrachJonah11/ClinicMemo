@@ -101,3 +101,19 @@ export const processSummary = async (docid: String, prompt: String,isText:String
     //console.log(response)
     return response;
 };
+
+export const forgotPassword = async (email:any)=>{
+    let req= await axios.post(`${APP_URL}/auth/forgot-password`,{
+        email:email
+    });
+    const data = req.data;
+    return data;
+    }
+export const resetPassword = async (token:any,password:any)=>{
+    let req= await axios.post(`${APP_URL}/auth/reset-password`,{
+        token: token,
+        password: password
+      });
+    const data = req.data;
+    return data;
+    }

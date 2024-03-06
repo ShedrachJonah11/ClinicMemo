@@ -69,7 +69,7 @@ function Index() {
         setLoading(false);
         console.log(res);
         //signed up successfully
-        router.push("/auth/verify");
+        router.push("/auth/check");
       } catch (error: any) {
         setLoading(false);
         console.log(error);

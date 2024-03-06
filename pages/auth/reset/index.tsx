@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import bg from "../../../public/bgauth.svg";
 import sheild from "../../../public/sheild.svg";
 import Image from "next/image";
@@ -7,7 +7,7 @@ import { Button, Card, CardBody, Checkbox, Input } from "@nextui-org/react";
 import Link from "next/link";
 import { EyeFilledIcon } from "../../../public/EyeFilledIcon";
 import { EyeSlashFilledIcon } from "../../../public/EyeSlashFilledIcon";
-import { loginAccount, loginGoogle } from "@/application/api/apis";
+import { loginAccount, loginGoogle, resetPassword } from "@/application/api/apis";
 import Loader from "@/components/Loader";
 import { useRouter } from "next/router";
 import goggle from "../../../public/goggle.svg";
@@ -15,6 +15,7 @@ import arrowback from "../../../public/menu2.svg";
 
 function Index() {
   const router = useRouter();
+
   const [isVisible, setIsVisible] = React.useState(false);
   const [userData, setUserData] = useState<any>({
     username: "",
@@ -24,6 +25,31 @@ function Index() {
   const loginG = async () => {};
   const login = async () => {};
   const toggleVisibility = () => setIsVisible(!isVisible);
+  const [pass,setPass]=useState("")
+
+  const { query } = router;
+ 
+
+  useEffect(() => {
+    
+  }, [query.token]);
+
+  const resetPass= async ()=>{
+    if(pass.length<1){
+      //show error 
+    }
+    try{
+      setLoading(true)
+   const data = await resetPassword(query.token,pass)
+   setLoading(false)
+   console.log(data)
+   //redirect user to password changed successfully page
+    }catch(e){
+      console.log(e)
+      setLoading(false)
+      //show invalid token here
+    }
+  }
 
   return (
     <div className="bg-cover bg-center h-screen flex items-center justify-center">
@@ -57,6 +83,10 @@ function Index() {
             label="Confirm Password"
             placeholder=""
             variant="bordered"
+            value={pass}
+            onChange={(e)=>{
+            setPass(e.target.value)  
+            }}
             endContent={
               <button type="button" onClick={toggleVisibility}>
                 {isVisible ? (
@@ -85,7 +115,7 @@ function Index() {
               size="lg"
               className="w-full mt-6 bg-[#008080]"
               onClick={() => {
-                login();
+               resetPass()
               }}
             >
               <p className="text-white text-semibold ">Confirm</p>
