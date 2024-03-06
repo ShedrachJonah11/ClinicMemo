@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import bg from "../../../public/bgauth.svg";
 import star from "../../../public/star.svg";
@@ -22,6 +21,8 @@ function Index() {
     password: "",
   });
   const [isLoading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
   const loginG = async () => {
     try {
       setLoading(true);
@@ -33,16 +34,21 @@ function Index() {
     } catch (e) {
       setLoading(false);
       console.log(e);
+      setError("Failed to login with Google");
     }
   };
+
   const login = async () => {
-    console.log(userData);
     if (userData) {
-      if (userData.username == "") {
-        toast.error("Please enter your username.");
+      if (!userData.username.trim()) {
+        toast.error("Please enter your email.");
         return;
       }
-      if (userData.password == "") {
+      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(userData.username.trim())) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
+      if (!userData.password.trim()) {
         toast.error("Please enter your password.");
         return;
       }
@@ -61,18 +67,22 @@ function Index() {
 
           if (data.detail === "LOGIN_BAD_CREDENTIALS") {
             // Handle invalid password error
-            toast.error("Account does not exist");
+            setError("Incorrect email/password");
           } else {
             // Handle other error scenarios
-            toast.error("Unknown error");
+            setError("Unknown error");
           }
         } else {
           // Handle other types of errors
-          toast.error("Unknown error");
+          setError("Incorrect email/password");
         }
       }
     }
   };
+
+  const isLoginButtonDisabled =
+    !userData.username.trim() || !userData.password.trim();
+  const [passwordLengthValid, setPasswordLengthValid] = useState(true);
   const toggleVisibility = () => setIsVisible(!isVisible);
 
   return (
@@ -80,27 +90,23 @@ function Index() {
       <Image src={bg} alt="Background" layout="fill" objectFit="cover" />
 
       <Card className="w-96 sm:w-[450px]  p-6 bg-opacity-75">
-        <div className="mb-4 ">
-          <Link href="">
-            <Image src={arrowback} alt="" />
-          </Link>
-        </div>
         <CardBody className="flex flex-col items-center">
-          <Image src={star} alt="" className="mt-2" />
+          <Image src={star} alt="" className="mt-2 mb-2" />
 
           <h1 className="text-lg font-bold mb-2">Log in your account</h1>
           <p className="text-gray-500 mb-6">
             Welcome back! Please enter your details.
           </p>
 
+          {error && <p className="text-red-500 font-medium mb-2">{error}</p>}
+
           <Input
             variant="bordered"
             type="email"
             label="Email"
             placeholder="Enter your email"
-            onChange={(e:any) => {
-              userData.username = e.target.value;
-              setUserData(userData);
+            onChange={(e: any) => {
+              setUserData({ ...userData, username: e.target.value });
             }}
           />
           <Input
@@ -118,17 +124,26 @@ function Index() {
             }
             type={isVisible ? "text" : "password"}
             className="mt-4"
-            onChange={(e:any) => {
-              userData.password = e.target.value;
-              setUserData(userData);
+            onChange={(e: any) => {
+              setUserData({ ...userData, password: e.target.value });
+              setPasswordLengthValid(
+                e.target.value.length >= 6 && e.target.value.length <= 36
+              );
             }}
           />
+          {!passwordLengthValid && (
+            <p className="text-red-500 text-xs font-medium mt-1">
+              Password should be between 6 to 36 characters
+            </p>
+          )}
 
           <Button
             size="lg"
-            className="w-full mt-6 bg-[#008080]"
-            onClick={() => {
-              login();
+            className="w-full mt-6 "
+            onClick={login}
+            disabled={isLoginButtonDisabled}
+            style={{
+              backgroundColor: isLoginButtonDisabled ? "#CCCCCC" : "#008080",
             }}
           >
             <p className="text-white text-semibold ">Login</p>
@@ -155,13 +170,7 @@ function Index() {
             <div className="flex-1 border-t border-black"></div>
           </div>
 
-          <Button
-            size="lg"
-            className="w-full bg-white mb-4"
-            onClick={() => {
-              loginG();
-            }}
-          >
+          <Button size="lg" className="w-full bg-white mb-4" onClick={loginG}>
             <Image src={goggle} alt="google" />
             <p>Login with Google</p>
           </Button>

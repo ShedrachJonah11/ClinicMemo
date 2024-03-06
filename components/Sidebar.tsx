@@ -23,7 +23,11 @@ import help from "../public/help.svg";
 import tag from "../public/tag-user.svg";
 import sign from "../public/sign out.svg";
 import { getJSONdata, getPlan } from "@/application/utils/functions";
-import { deleteEncounterDB, getAllEncouterDB } from "@/application/database/database";
+import {
+  deleteEncounterDB,
+  getAllEncouterDB,
+} from "@/application/database/database";
+import AccountModal from "./AccountModal";
 
 interface SliderProps {
   isSidebarOpen: boolean;
@@ -53,6 +57,8 @@ const Sidebar: React.FC<SliderProps> = ({
   const [hoveredStates, setHoveredStates] = useState<boolean[]>([]);
   const [userData, setUserData] = useState<any>();
   const [documents, setDocuments] = useState<any>([]);
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const handleResetState = () => {
     resetState();
@@ -111,11 +117,11 @@ const Sidebar: React.FC<SliderProps> = ({
       return newStates;
     });
   };
-  const deleteRecord= async ()=>{
-    console.log(activeId)
+  const deleteRecord = async () => {
+    console.log(activeId);
     await deleteEncounterDB(activeId);
     loadDocuments();
-  }
+  };
   return (
     <div
       className={`sidebar bg-[#FAFAFA] h-full w-96 fixed top-0 left-0 z-20 transition-transform duration-300 ease-in-out transform ${
@@ -238,7 +244,7 @@ const Sidebar: React.FC<SliderProps> = ({
                   <div>
                     <div className="flex gap-2">
                       <h3 className="text-small font-bold" {...titleProps}>
-                        John Deo
+                        {userData?.name}
                       </h3>
                       <div className=" border px-2 border-blue-400 b-t-2 rounded-lg bg-blue-200 ">
                         <p className="text-[#0058FA]">
@@ -269,7 +275,11 @@ const Sidebar: React.FC<SliderProps> = ({
                 <Divider />
 
                 <div>
-                  <button className="flex p-2 items-center mt-2 mb-4">
+                  <button
+                    type="button"
+                    className="flex p-2 items-center mt-2 mb-4"
+                    onClick={onOpen}
+                  >
                     <Image
                       src={settings}
                       alt=""
@@ -279,17 +289,8 @@ const Sidebar: React.FC<SliderProps> = ({
                     />
                     <h1 className="text-base font-medium">Account</h1>
                   </button>
-                  <button className="flex p-2 items-center mb-4">
-                    <Image
-                      src={tag}
-                      alt=""
-                      width={25}
-                      height={25}
-                      className="mr-4"
-                    />
-                    <h1 className="text-base font-medium">Preferences</h1>
-                  </button>
-                  <button className="flex p-2 items-center mb-4">
+
+                  <button type="button" className="flex p-2 items-center mb-4">
                     <Image
                       src={help}
                       alt=""
@@ -300,7 +301,7 @@ const Sidebar: React.FC<SliderProps> = ({
                     <h1 className="text-base font-medium">Contact Us</h1>
                   </button>
                   <Divider />
-                  <button className="flex p-2 items-center mb-4">
+                  <button type="button" className="flex p-2 items-center mb-4">
                     <Image
                       src={sign}
                       alt=""
@@ -316,6 +317,8 @@ const Sidebar: React.FC<SliderProps> = ({
           </PopoverContent>
         </Popover>
         {/* Profile button */}
+
+        <AccountModal isOpen={isOpen} onClose={onClose} />
 
         <button
           type="button"

@@ -12,6 +12,7 @@ import Loader from "@/components/Loader";
 import goggle from "../../../public/goggle.svg";
 import arrowback from "../../../public/menu2.svg";
 import { toast } from "react-toastify";
+import router from "next/router";
 
 function Index() {
   const [isVisible, setIsVisible] = React.useState(false);
@@ -23,6 +24,12 @@ function Index() {
   });
   const [isLoading, setLoading] = useState(false);
   const toggleVisibility = () => setIsVisible(!isVisible);
+
+  const isLoginButtonDisabled =
+    !userData.first_name.trim() ||
+    !userData.last_name.trim() ||
+    !userData.password.trim() ||
+    !userData.email.trim();
 
   const loginG = async () => {
     try {
@@ -62,6 +69,7 @@ function Index() {
         setLoading(false);
         console.log(res);
         //signed up successfully
+        router.push("/auth/verify");
       } catch (error: any) {
         setLoading(false);
         console.log(error);
@@ -87,11 +95,6 @@ function Index() {
     <div className="bg-cover bg-center h-screen flex items-center justify-center">
       <Image src={bg} alt="Background" layout="fill" objectFit="cover" />
       <Card className="w-96 sm:w-[450px]  p-6 bg-opacity-75 ">
-        <div className="mb-4 ">
-          <Link href="">
-            <Image src={arrowback} alt="" />
-          </Link>
-        </div>
         <CardBody className="flex flex-col items-center">
           <Image src={star} alt="" className="mt-2" />
 
@@ -103,7 +106,7 @@ function Index() {
             placeholder="Enter your first name"
             className="mb-4"
             variant="bordered"
-            onChange={(e:any) => {
+            onChange={(e: any) => {
               userData.first_name = e.target.value;
               setUserData(userData);
             }}
@@ -114,7 +117,7 @@ function Index() {
             placeholder="Enter your last name"
             variant="bordered"
             className="mb-4"
-            onChange={(e:any) => {
+            onChange={(e: any) => {
               userData.last_name = e.target.value;
               setUserData(userData);
             }}
@@ -124,7 +127,7 @@ function Index() {
             label="Email"
             placeholder="Enter your email"
             variant="bordered"
-            onChange={(e:any) => {
+            onChange={(e: any) => {
               userData.email = e.target.value;
               setUserData(userData);
             }}
@@ -148,7 +151,7 @@ function Index() {
             }
             type={isVisible ? "text" : "password"}
             className="mt-4"
-            onChange={(e:any) => {
+            onChange={(e: any) => {
               userData.password = e.target.value;
               setUserData(userData);
             }}
@@ -156,9 +159,13 @@ function Index() {
 
           <Button
             size="lg"
-            className="w-full mt-6 bg-[#008080]"
+            className="w-full mt-6"
             onClick={() => {
               register();
+            }}
+            disabled={isLoginButtonDisabled}
+            style={{
+              backgroundColor: isLoginButtonDisabled ? "#CCCCCC" : "#008080",
             }}
           >
             <p className="text-white text-semibold ">Sign Up</p>

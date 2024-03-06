@@ -60,6 +60,7 @@ declare global {
 
 function Index() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isAccountModal, setIsAccountModal] = useState(false);
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("transcript");
   const [transcript, setTranscript] = useState("");
@@ -82,6 +83,10 @@ function Index() {
 
   const toggleLeftSideBar = () => {
     setIsLeftSidebarOpen(!isLeftSidebarOpen);
+  };
+
+  const toggleAccountModal = () => {
+    setIsAccountModal(!isAccountModal);
   };
 
   useEffect(() => {
@@ -174,7 +179,11 @@ function Index() {
         />
 
         {/* Main Content */}
-        <div className={`h-screen flex-1 relative ${isSidebarOpen ? "lg:ml-96" : ""} `}>
+        <div
+          className={`h-screen flex-1 relative ${
+            isSidebarOpen ? "lg:ml-96" : ""
+          } `}
+        >
           {/* Header */}
           <div
             className={`bg-[#FAFAFA] shadow h-16 flex items-center justify-between px-4 ${
