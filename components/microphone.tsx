@@ -33,6 +33,7 @@ export default function Microphone({
   const [microphone, setMicrophone] = useState<MediaRecorder | null>();
   const [userMedia, setUserMedia] = useState<MediaStream | null>();
   const [caption, setCaption] = useState<string | null>();
+  const [firstOpen,setFirstOpen]=useState(true);
 
   const toggleMicrophone = useCallback(async () => {
     if (microphone && userMedia) {
@@ -70,7 +71,9 @@ export default function Microphone({
       setMicrophone(microphone);
     }
   }, [add, microphone, userMedia, isListening]);
-  
+  useEffect(()=>{
+    //toggleMicrophone();
+  },[])
   useEffect(() => {
     if (!apiKey) {
       console.log("getting a new api key");
@@ -100,7 +103,12 @@ export default function Microphone({
 
       connection.on(LiveTranscriptionEvents.Open, () => {
         console.log("connection established");
+        if(firstOpen){
+          toggleMicrophone();
+          setFirstOpen(false);
+        }
         setListening(true);
+        setLoading(false)
       });
 
       connection.on(LiveTranscriptionEvents.Close, () => {
@@ -108,6 +116,7 @@ export default function Microphone({
         setListening(false);
         setApiKey(null);
         setConnection(null);
+        setLoading(true)
       });
 
       connection.on(LiveTranscriptionEvents.Transcript, (data) => {

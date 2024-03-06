@@ -23,7 +23,7 @@ import help from "../public/help.svg";
 import tag from "../public/tag-user.svg";
 import sign from "../public/sign out.svg";
 import { getJSONdata, getPlan } from "@/application/utils/functions";
-import { getAllEncouterDB } from "@/application/database/database";
+import { deleteEncounterDB, getAllEncouterDB } from "@/application/database/database";
 
 interface SliderProps {
   isSidebarOpen: boolean;
@@ -111,7 +111,11 @@ const Sidebar: React.FC<SliderProps> = ({
       return newStates;
     });
   };
-
+  const deleteRecord= async ()=>{
+    console.log(activeId)
+    await deleteEncounterDB(activeId);
+    loadDocuments();
+  }
   return (
     <div
       className={`sidebar bg-[#FAFAFA] h-full w-96 fixed top-0 left-0 z-20 transition-transform duration-300 ease-in-out transform ${
@@ -171,6 +175,7 @@ const Sidebar: React.FC<SliderProps> = ({
                   <DeleteModal
                     isOpen={isDeleteModalOpen}
                     onClose={onDeleteModalClose}
+                    callback={deleteRecord}
                   />
                 </div>
               </button>

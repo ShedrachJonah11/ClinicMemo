@@ -133,3 +133,21 @@ export async function createNewEncounterDB()
       throw error; // Rethrow the error for the caller to handle if needed
     }
   }
+
+  export async function deleteEncounterDB(id: any): Promise<void> {
+    try {
+      await openDatabase();
+  
+      // Use the Dexie 'docData' table to delete the specified encounter by ID asynchronously
+      const deleteCount = await db.docData.where({ id }).delete();
+  
+      if (deleteCount > 0) {
+        console.log(`Encounter with ID ${id} deleted successfully!`);
+      } else {
+        console.log(`No encounter found with ID ${id}. Nothing deleted.`);
+      }
+    } catch (error) {
+      console.error(`Error deleting encounter with ID ${id}: `, error);
+      throw error; // Rethrow the error for the caller to handle if needed
+    }
+  }

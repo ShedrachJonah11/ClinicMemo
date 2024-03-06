@@ -13,9 +13,10 @@ import Image from "next/image";
 interface DeleteModalProps {
   isOpen: boolean;
   onClose: () => void;
+  callback:any;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose }) => {
+const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose,callback }) => {
   return (
     <Modal backdrop="opaque" isOpen={isOpen} onOpenChange={onClose}>
       <ModalContent>
@@ -33,7 +34,10 @@ const DeleteModal: React.FC<DeleteModalProps> = ({ isOpen, onClose }) => {
           <Button className="border" variant="light" onPress={onClose}>
             Close
           </Button>
-          <Button className="bg-[#008080]" onPress={onClose}>
+          <Button className="bg-[#008080]" onClick={()=>{
+            callback();
+            onClose();
+          }}>
             <p className="text-white">Delete</p>
           </Button>
         </ModalFooter>
