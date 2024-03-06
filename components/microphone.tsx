@@ -13,7 +13,15 @@ import Recording from "./recording.svg";
 import Image from "next/image";
 import Loader from "./Loader";
 
-export default function Microphone({callback,stopRecording,id}:{callback:any,stopRecording:any,id:any}) {
+export default function Microphone({
+  callback,
+  stopRecording,
+  id,
+}: {
+  callback: any;
+  stopRecording: any;
+  id: any;
+}) {
   const { add, remove, first, size, queue } = useQueue<any>([]);
   const [apiKey, setApiKey] = useState<CreateProjectKeyResponse | null>();
   const [connection, setConnection] = useState<LiveClient | null>();
@@ -30,32 +38,38 @@ export default function Microphone({callback,stopRecording,id}:{callback:any,sto
     if (microphone && userMedia) {
       setUserMedia(null);
       setMicrophone(null);
-
+  
+      if (isListening) {
+        setListening(false); // Stop listening when stopping recording
+      }
+  
       microphone.stop();
     } else {
       const userMedia = await navigator.mediaDevices.getUserMedia({
         audio: true,
       });
-
+  
       const microphone = new MediaRecorder(userMedia);
       microphone.start(500);
-
+  
       microphone.onstart = () => {
         setMicOpen(true);
+        setListening(true); // Start listening when starting recording
       };
-
+  
       microphone.onstop = () => {
         setMicOpen(false);
+        // Do not change the state of isListening here
       };
-
+  
       microphone.ondataavailable = (e) => {
         add(e.data);
       };
-
+  
       setUserMedia(userMedia);
       setMicrophone(microphone);
     }
-  }, [add, microphone, userMedia]);
+  }, [add, microphone, userMedia, isListening]);
   
   useEffect(() => {
     if (!apiKey) {
@@ -103,7 +117,7 @@ export default function Microphone({callback,stopRecording,id}:{callback:any,sto
           .join(" ");
         if (caption !== "") {
           setCaption(caption);
-          callback(caption)
+          callback(caption);
         }
       });
 
@@ -133,43 +147,43 @@ export default function Microphone({callback,stopRecording,id}:{callback:any,sto
     processQueue();
   }, [connection, queue, remove, first, size, isProcessing, isListening]);
 
-  if (isLoadingKey || isLoading)
-    return (
-     <Loader/>
-    );
+  if (isLoadingKey || isLoading) return <Loader />;
 
   return (
     <>
-     {/* Stop recording */}
-              <button type="button" className={isListening?"active":""} onClick={()=>toggleMicrophone()}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 432 432"
-                >
-                  <path
-                    fill="#257442"
-                    d="M213.5 3q88.5 0 151 62.5T427 216t-62.5 150.5t-151 62.5t-151-62.5T0 216T62.5 65.5T213.5 3z"
-                  />
-                </svg>
-              </button>
+      {/* starts & Stop recording */}
+      <button
+        type="button"
+        className={`relative ${isListening ? "active" : ""}`}
+        onClick={() => toggleMicrophone()}
+      >
+        <div
+          className={`w-6 h-6 rounded-full ${
+            isListening ? "bg-red-600" : "bg-green-600"
+          }`}
+        >
+          {isListening && (
+            <div className="absolute inset-0 flex justify-center items-center">
+              <div className="w-3 h-3 rounded-full border-2 border-white animate-pulse" />
+            </div>
+          )}
+        </div>
+      </button>
 
-              {/* Hold Recording */}
-              <button type="button" onClick={()=>stopRecording()}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="35"
-                  viewBox="0 0 26 26"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M21 20c0 .551-.449 1-1 1H6c-.551 0-1-.449-1-1V6c0-.551.449-1 1-1h14c.551 0 1 .449 1 1v14z"
-                  />
-                </svg>
-              </button>
-           
-              </>
+      {/* Hold Recording */}
+      <button type="button" onClick={() => stopRecording()}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="35"
+          viewBox="0 0 26 26"
+        >
+          <path
+            fill="currentColor"
+            d="M21 20c0 .551-.449 1-1 1H6c-.551 0-1-.449-1-1V6c0-.551.449-1 1-1h14c.551 0 1 .449 1 1v14z"
+          />
+        </svg>
+      </button>
+    </>
   );
 }

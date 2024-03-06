@@ -137,11 +137,7 @@ function Index() {
     };
     console.log(postdata);
     const req = await generateNote(postdata);
-    await updateEncounterDB(
-      currentDocument,
-      "summary",
-      JSON.stringify(req)
-    );
+    await updateEncounterDB(currentDocument, "summary", JSON.stringify(req));
     setActiveTab("note");
     setGNote(req);
     //console.log("note here",req);
@@ -178,7 +174,7 @@ function Index() {
         />
 
         {/* Main Content */}
-        <div className={`h-screen flex-1 ${isSidebarOpen ? "lg:ml-96" : ""} `}>
+        <div className={`h-screen flex-1 relative ${isSidebarOpen ? "lg:ml-96" : ""} `}>
           {/* Header */}
           <div
             className={`bg-[#FAFAFA] shadow h-16 flex items-center justify-between px-4 ${

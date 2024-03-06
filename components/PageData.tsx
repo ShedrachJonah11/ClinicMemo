@@ -68,7 +68,15 @@ const PageData = ({
   const languages = ["English", "Spanish", "French", "German"];
   const [allData, setAllData] = useState<any>({});
   const [pnote, setPNote] = useState("");
+  const transcriptContainerRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    // Scroll to the bottom of the transcript container whenever transcript is updated
+    if (transcriptContainerRef.current) {
+      transcriptContainerRef.current.scrollTop =
+        transcriptContainerRef.current.scrollHeight;
+    }
+  }, [transcript]);
   const [showUploadContent, setShowUploadContent] = useState(false);
 
   const loadDocument = async () => {
@@ -360,8 +368,13 @@ const PageData = ({
       {activeTab === "transcript" &&
         allData.transcript != null &&
         allData.transcript != "" && (
-          <div className="py-10 px-10">
-            {processTranscript(allData.transcript) /* transcript here  */}
+          <div
+            className="py-10 pb-20 px-10 transcript-container overflow-y-auto max-h-[calc(100vh-80px)]"
+            ref={transcriptContainerRef}
+          >
+            <div className="transcript-content">
+              {processTranscript(allData.transcript)}
+            </div>
             <Button
               size="lg"
               className="button bg-[#008080] text-white fixed right-5 bottom-10"
