@@ -28,12 +28,11 @@ import edit from "../public/edit-2.svg";
 import arrowdown from "../public/arrow-down.svg";
 import file from "../public/document-forward.svg";
 import { getCurrentDateTime, getJSONdata } from "@/application/utils/functions";
-import { Deepgram,createClient, LiveTranscriptionEvents } from "@deepgram/sdk";
-import { useRecordVoice } from "@/application/useRecordVoice";
 import axiosInstance from "@/application/api/axiosInstance";
 import { getEncouterDB, insertTranscriptDB, updateEncounterDB } from "@/application/database/database";
 import Loader from "./Loader";
 import { generateNote, getTranscript } from "@/application/api/apis";
+import Microphone from "./microphone";
 
 
 
@@ -41,7 +40,7 @@ const PageData=({activeTab,setActiveTab,id,updateTranscript,generateAutoNote,gno
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
     const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(false);
     const [selectedLanguage, setSelectedLanguage] = useState("English (US)");
-    const [transcript, setTranscript] = useState("");
+    const [transcript, setTranscript] = useState("[]");
     const [isRecording, setIsRecording] = useState(false);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [showNoteCards, setShowNoteCards] = useState(false);
@@ -109,13 +108,11 @@ const PageData=({activeTab,setActiveTab,id,updateTranscript,generateAutoNote,gno
     console.log("Updated blob data:", blob);
     // Process or use the blob data as needed
   };
-  const recordData = useRecordVoice();
+
 
   const startRecording = async () => {
     try {
       setIsRecording(true);
-      recordData.startRecording();
-      //sendData();
       
     } catch (error) {
         console.error('Error accessing microphone:', error);
@@ -124,21 +121,11 @@ const PageData=({activeTab,setActiveTab,id,updateTranscript,generateAutoNote,gno
 
 
 const stopRecording = async () => {
- recordData.stopRecording();
- console.log(recordData.recordedBlob,"heyy")
- if(recordData.recordedBlob){
-  const uurl = URL.createObjectURL(recordData.recordedBlob);
-  const audioElement = new Audio(uurl);
-  audioElement.play();
-  processDeepGram(uurl)
- 
- }
     setIsRecording(false);
 
 }
-const sendData = async () => {
- 
-}
+let cn=0;
+
 
 
   // Function to pause recording
@@ -146,63 +133,35 @@ const sendData = async () => {
 
   // Function to resume recording
   const resumeRecording = () => {};
+  function processTranscript(jsonString:any) {
+    try {
+      const transcriptArray = JSON.parse(jsonString);
   
+      if (Array.isArray(transcriptArray)) {
+        // If it's an array (assumed to be JSON), generate divs for each entry
+        const divs = transcriptArray.map((entry, index) => (
+          <div key={index}>
+            <div style={{ fontSize: 'small',marginBottom:"10px" }}>{entry.date}</div>
+
+            <div>{entry.text}</div>
+            <br/>
+          </div>
+        ));
+  
+        return divs;
+      }
+    } catch (error) {
+      // If parsing as JSON fails, treat it as a plain text and return it
+      return <div>{jsonString}</div>;
+    }
+  
+    // If it's not JSON, treat it as plain text and return it
+    return <div>{jsonString}</div>;
+  }
   const handleLanguageChange = (language: string) => {
     setSelectedLanguage(language);
   };
 
-  let deepgramConnection:any;
-    //let cn=0;
-    const processDeepGram = async (audioBuffer:any) => {
-        //const blob = new Blob([audioBuffer], { type: "audio/wav" });
-        //console.log(blob)
-        //const url = window.URL.createObjectURL(blob);
-      
-        try {
-          // Initialize the connection only if it's not already set
-          if (!deepgramConnection) {
-              const deepgram = createClient("f3a5bc99cd3475e419b506390921a9fab2660b9a");
-    
-              deepgramConnection = deepgram.listen.live({
-                  model: "nova-2",
-                  language: "en-US",
-                  smart_format: true,
-              });
-    
-              deepgramConnection.on(LiveTranscriptionEvents.Open, () => {
-                  console.log("Connection opened.");
-                  setListening(true)
-              });
-    
-              deepgramConnection.on(LiveTranscriptionEvents.Close, () => {
-                  console.log("Connection closed.");
-                  setListening(false)
-                  deepgramConnection=null;
-              });
-    
-              deepgramConnection.on(LiveTranscriptionEvents.Transcript, (data:any) => {
-                  console.log("Transcript:", data.channel.alternatives[0].transcript);
-                  // Process the transcript data as needed
-              });
-    
-              deepgramConnection.on(LiveTranscriptionEvents.Metadata, (data:any) => {
-                  console.log("Metadata:", data);
-                  // Process metadata as needed
-              });
-    
-              deepgramConnection.on(LiveTranscriptionEvents.Error, (err:any) => {
-                  console.error("Error:", err);
-              });
-          }
-    
-          // Send the audio buffer to the existing connection
-          if(isListening){
-          deepgramConnection.send(audioBuffer);
-          }
-      } catch (error) {
-          console.error('Error processing audio with Deepgram SDK:', error);
-      }
-      };
       const uploadFileTrans = async (file:any) => {
         setLoading(true);
       
@@ -242,6 +201,25 @@ const sendData = async () => {
             setLoading(false);
         }
       }
+      const transcriptCallBack = async (text: any) => {
+        console.log(text)
+        const data = {
+          date: getCurrentDateTime(),
+          text: text,
+        };
+        let dbdata = await getEncouterDB(id);
+          try {
+            
+            const existingTranscript = JSON.parse(dbdata.transcript?dbdata.transcript:"[]");
+              existingTranscript.push(data);
+              setTranscript(JSON.stringify(existingTranscript));
+              await updateEncounterDB(id,"transcript",JSON.stringify(existingTranscript))
+          } catch (error) {
+            setTranscript(dbdata.transcript + text);
+            await updateEncounterDB(id,"transcript",dbdata.transcript + text)
+          }
+          loadDocument();
+        } 
     return (
         <div className="h-full">
         {activeTab === "transcript" && !isRecording && (allData.transcript=="" || allData.transcript==null ) && (allData.isFileUsed==null) && (
@@ -357,7 +335,7 @@ const sendData = async () => {
         ) }
         {activeTab === "transcript" &&  allData.transcript!=null  && allData.transcript!="" && (
             <div>
-               {allData.transcript} 
+               {processTranscript(allData.transcript) /* transcript here  */} 
                <Button className="button" onClick={ ()=>{
               
                 generateMainNote()
@@ -518,58 +496,20 @@ const sendData = async () => {
         </div>
 
         {activeTab === "transcript" && isRecording && (
+          <>
           <div className="flex mt-6 justify-between p-4">
-            <div className="p-4">
-              {/* <p>{recordingDuration}</p> */}
-              <p className="text-black">{transcript}</p>
+          <div className="p-4">
+            
             </div>
             <div className="flex bg-[#E5E8EC] h-16 rounded-full px-6 py-2 gap-4 ">
-              {/* pause recording */}
-              <button type="button" onClick={pauseRecording}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="25"
-                  viewBox="0 0 26 26"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M7 5c-.551 0-1 .449-1 1v14c0 .551.449 1 1 1h3c.551 0 1-.449 1-1V6c0-.551-.449-1-1-1H7zm9 0c-.551 0-1 .449-1 1v14c0 .551.449 1 1 1h3c.551 0 1-.449 1-1V6c0-.551-.449-1-1-1h-3z"
-                  />
-                </svg>
-              </button>
-
-              {/* Stop recording */}
-              <button type="button" onClick={stopRecording}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 432 432"
-                >
-                  <path
-                    fill="#257442"
-                    d="M213.5 3q88.5 0 151 62.5T427 216t-62.5 150.5t-151 62.5t-151-62.5T0 216T62.5 65.5T213.5 3z"
-                  />
-                </svg>
-              </button>
-
-              {/* Hold Recording */}
-              <button type="button" onClick={resumeRecording}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="25"
-                  height="35"
-                  viewBox="0 0 26 26"
-                >
-                  <path
-                    fill="currentColor"
-                    d="M21 20c0 .551-.449 1-1 1H6c-.551 0-1-.449-1-1V6c0-.551.449-1 1-1h14c.551 0 1 .449 1 1v14z"
-                  />
-                </svg>
-              </button>
-            </div>
+          <Microphone 
+          callback={transcriptCallBack}
+          stopRecording={stopRecording}
+          id={id}
+          />
           </div>
+          </div>
+           </>
         )}
         {isLoading && <Loader type={'FULL'}/>}
       </div>

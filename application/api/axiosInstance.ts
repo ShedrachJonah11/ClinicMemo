@@ -45,30 +45,24 @@ storeJSONdata("user",tokens);
 }
 let tokens = getJSONdata("user");
 function tk(){
+    //console.log(getJSONdata("user"))
   return  getJSONdata("user").access_token; 
 }
 const AxiosInstance = axios.create({
     baseURL: APP_URL,
-    headers: {
-        'Authorization': 'Bearer ' + tk(),
-    },
 });
 
 AxiosInstance.interceptors.request.use(
-    async (config) => {
-        const isAccessTokenExpired =await checkToken();
-        //console.log(isAccessTokenExpired)
-        if (!isAccessTokenExpired) {
-            const newAccessToken = await refreshAccessToken(tokens.refresh_token);
-            updateToken(newAccessToken);
-            config.headers['Authorization'] = 'Bearer ' + newAccessToken;
-        }
-
-        return config;
+    (config) => {
+      const accessToken = tk();
+      if (accessToken) {
+        config.headers['Authorization'] = 'Bearer ' + accessToken;
+      }
+      return config;
     },
     (error) => {
-        return Promise.reject(error);
+      return Promise.reject(error);
     }
-);
+  );
 
 export default AxiosInstance;
